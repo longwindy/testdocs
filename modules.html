@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scenario_tool &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=34969b80"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="core package" href="core.html" />
+    <link rel="prev" title="scenario_tool documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scenario_tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html">core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engines.html">engines package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html">generate_scenario module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_test_data.html">generate_test_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html">gui package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_gui.html">run_gui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html">sync_resources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html">update_param module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html">validate_resources module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">scenario_tool</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="scenario-tool">
+<h1>scenario_tool<a class="headerlink" href="#scenario-tool" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="core.html">core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.base_sentence_generator">core.base_sentence_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.can_process"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.can_process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.category"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.do_translate"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.do_translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.exists_param"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.exists_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.get_format_in_config"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_format_in_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.get_int"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.get_sentence"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_sentence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.get_value"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.priority"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator.process"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.config_manager">core.config_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.create_default"><code class="docutils literal notranslate"><span class="pre">AppConfig.create_default()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.engine"><code class="docutils literal notranslate"><span class="pre">AppConfig.engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.from_file"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.paths"><code class="docutils literal notranslate"><span class="pre">AppConfig.paths</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.processing"><code class="docutils literal notranslate"><span class="pre">AppConfig.processing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.AppConfig.to_file"><code class="docutils literal notranslate"><span class="pre">AppConfig.to_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.EngineConfig"><code class="docutils literal notranslate"><span class="pre">EngineConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.EngineConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">EngineConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.EngineConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">EngineConfig.file_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.EngineConfig.get_output_filename"><code class="docutils literal notranslate"><span class="pre">EngineConfig.get_output_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.EngineConfig.indent_size"><code class="docutils literal notranslate"><span class="pre">EngineConfig.indent_size</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.NaninovelConfig"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.NaninovelConfig.command_prefix"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.command_prefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.NaninovelConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.NaninovelConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.file_extension</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.PathConfig"><code class="docutils literal notranslate"><span class="pre">PathConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.PathConfig.ensure_dirs_exist"><code class="docutils literal notranslate"><span class="pre">PathConfig.ensure_dirs_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.PathConfig.input_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.input_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.PathConfig.log_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.log_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.PathConfig.output_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.output_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.PathConfig.param_config_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.param_config_dir</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.ProcessingConfig"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.ProcessingConfig.batch_size"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.batch_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.ProcessingConfig.enable_progress_bar"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.enable_progress_bar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.ProcessingConfig.ignore_mode"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.ignore_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.ProcessingConfig.ignore_words"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.ignore_words</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig"><code class="docutils literal notranslate"><span class="pre">RenpyConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig.default_transition"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.default_transition</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.file_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig.indent_size"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.indent_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.config_manager.RenpyConfig.label_indent"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.label_indent</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.constants">core.constants module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.ColumnName"><code class="docutils literal notranslate"><span class="pre">ColumnName</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.BACKGROUND"><code class="docutils literal notranslate"><span class="pre">ColumnName.BACKGROUND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.CHARACTER"><code class="docutils literal notranslate"><span class="pre">ColumnName.CHARACTER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.IGNORE"><code class="docutils literal notranslate"><span class="pre">ColumnName.IGNORE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.NOTE"><code class="docutils literal notranslate"><span class="pre">ColumnName.NOTE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.SPEAKER"><code class="docutils literal notranslate"><span class="pre">ColumnName.SPEAKER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.ColumnName.TEXT"><code class="docutils literal notranslate"><span class="pre">ColumnName.TEXT</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.FileType"><code class="docutils literal notranslate"><span class="pre">FileType</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.BACKGROUND"><code class="docutils literal notranslate"><span class="pre">FileType.BACKGROUND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.CHARACTER"><code class="docutils literal notranslate"><span class="pre">FileType.CHARACTER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.EVENT"><code class="docutils literal notranslate"><span class="pre">FileType.EVENT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.MUSIC"><code class="docutils literal notranslate"><span class="pre">FileType.MUSIC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.SOUND"><code class="docutils literal notranslate"><span class="pre">FileType.SOUND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.FileType.VOICE"><code class="docutils literal notranslate"><span class="pre">FileType.VOICE</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.Marker"><code class="docutils literal notranslate"><span class="pre">Marker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.Marker.END"><code class="docutils literal notranslate"><span class="pre">Marker.END</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.SheetName"><code class="docutils literal notranslate"><span class="pre">SheetName</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.SheetName.PARAM_SHEET"><code class="docutils literal notranslate"><span class="pre">SheetName.PARAM_SHEET</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.SpecialSpeaker"><code class="docutils literal notranslate"><span class="pre">SpecialSpeaker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.SpecialSpeaker.LABEL_CAMMAND"><code class="docutils literal notranslate"><span class="pre">SpecialSpeaker.LABEL_CAMMAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.SpecialSpeaker.NANINOVEL_COMMAND"><code class="docutils literal notranslate"><span class="pre">SpecialSpeaker.NANINOVEL_COMMAND</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.SpecialSpeaker.RENPY_COMMAND"><code class="docutils literal notranslate"><span class="pre">SpecialSpeaker.RENPY_COMMAND</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.constants.WindowMode"><code class="docutils literal notranslate"><span class="pre">WindowMode</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.WindowMode.HIDE"><code class="docutils literal notranslate"><span class="pre">WindowMode.HIDE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.WindowMode.SHOW"><code class="docutils literal notranslate"><span class="pre">WindowMode.SHOW</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.constants.WindowMode.SHOW_AND_HIDE"><code class="docutils literal notranslate"><span class="pre">WindowMode.SHOW_AND_HIDE</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.engine_processor">core.engine_processor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.engine_processor.EngineProcessor"><code class="docutils literal notranslate"><span class="pre">EngineProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_processor.EngineProcessor.get_generator_manager"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.get_generator_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_processor.EngineProcessor.get_pipeline_info"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.get_pipeline_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_processor.EngineProcessor.process_row"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.process_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_processor.EngineProcessor.setup"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.setup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.engine_registry">core.engine_registry module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata"><code class="docutils literal notranslate"><span class="pre">EngineMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.config_class"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.config_class</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.description"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.display_name"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.display_name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.file_extension"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.file_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.name"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.processor_factory"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.processor_factory</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineMetadata.validator_factory"><code class="docutils literal notranslate"><span class="pre">EngineMetadata.validator_factory</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry"><code class="docutils literal notranslate"><span class="pre">EngineRegistry</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry.get"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry.is_registered"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.is_registered()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry.list_engines"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.list_engines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry.register"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.engine_registry.EngineRegistry.reset"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.engine_registry.register_engine"><code class="docutils literal notranslate"><span class="pre">register_engine()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.exceptions">core.exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.ConfigError"><code class="docutils literal notranslate"><span class="pre">ConfigError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.EngineError"><code class="docutils literal notranslate"><span class="pre">EngineError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.EngineNotRegisteredError"><code class="docutils literal notranslate"><span class="pre">EngineNotRegisteredError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.ExcelParseError"><code class="docutils literal notranslate"><span class="pre">ExcelParseError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.FileValidationError"><code class="docutils literal notranslate"><span class="pre">FileValidationError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.GeneratorError"><code class="docutils literal notranslate"><span class="pre">GeneratorError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.InvalidParameterError"><code class="docutils literal notranslate"><span class="pre">InvalidParameterError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.ScenarioToolError"><code class="docutils literal notranslate"><span class="pre">ScenarioToolError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.exceptions.TranslationError"><code class="docutils literal notranslate"><span class="pre">TranslationError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.logger">core.logger module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.logger.ColoredFormatter"><code class="docutils literal notranslate"><span class="pre">ColoredFormatter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ColoredFormatter.BOLD"><code class="docutils literal notranslate"><span class="pre">ColoredFormatter.BOLD</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ColoredFormatter.COLORS"><code class="docutils literal notranslate"><span class="pre">ColoredFormatter.COLORS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ColoredFormatter.RESET"><code class="docutils literal notranslate"><span class="pre">ColoredFormatter.RESET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ColoredFormatter.format"><code class="docutils literal notranslate"><span class="pre">ColoredFormatter.format()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.logger.ScenarioToolLogger"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ScenarioToolLogger.get_logger"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.logger.ScenarioToolLogger.reset"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.logger.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.param_translator">core.param_translator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.param_translator.LayerTranslator"><code class="docutils literal notranslate"><span class="pre">LayerTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.LayerTranslator.get_layer_params"><code class="docutils literal notranslate"><span class="pre">LayerTranslator.get_layer_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.LayerTranslator.get_layer_translations"><code class="docutils literal notranslate"><span class="pre">LayerTranslator.get_layer_translations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.LayerTranslator.translate_layer"><code class="docutils literal notranslate"><span class="pre">LayerTranslator.translate_layer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator"><code class="docutils literal notranslate"><span class="pre">ParamTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.get_available_types"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_available_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.get_params_for_type"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_params_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.get_translations_for_type"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_translations_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.has_mapping"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.has_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.translate"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.translate_batch"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator.translate_varient"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate_varient()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.param_translator.TransformTranslator"><code class="docutils literal notranslate"><span class="pre">TransformTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransformTranslator.get_transform_params"><code class="docutils literal notranslate"><span class="pre">TransformTranslator.get_transform_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransformTranslator.get_transform_translations"><code class="docutils literal notranslate"><span class="pre">TransformTranslator.get_transform_translations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransformTranslator.translate_transform"><code class="docutils literal notranslate"><span class="pre">TransformTranslator.translate_transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.param_translator.TransitionTranslator"><code class="docutils literal notranslate"><span class="pre">TransitionTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransitionTranslator.get_transition_params"><code class="docutils literal notranslate"><span class="pre">TransitionTranslator.get_transition_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransitionTranslator.get_transition_translations"><code class="docutils literal notranslate"><span class="pre">TransitionTranslator.get_transition_translations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.param_translator.TransitionTranslator.translate_transition"><code class="docutils literal notranslate"><span class="pre">TransitionTranslator.translate_transition()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core.sentence_generator_manager">core.sentence_generator_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.sentence_generator_manager.SentenceGeneratorManager"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.sentence_generator_manager.SentenceGeneratorManager.create_generator_instances"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.create_generator_instances()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.sentence_generator_manager.SentenceGeneratorManager.get_all_param_names"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.get_all_param_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.sentence_generator_manager.SentenceGeneratorManager.get_validate_params"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.get_validate_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.sentence_generator_manager.SentenceGeneratorManager.load"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.load()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#module-core">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.AppConfig"><code class="docutils literal notranslate"><span class="pre">AppConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.create_default"><code class="docutils literal notranslate"><span class="pre">AppConfig.create_default()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.engine"><code class="docutils literal notranslate"><span class="pre">AppConfig.engine</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.from_dict"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.from_file"><code class="docutils literal notranslate"><span class="pre">AppConfig.from_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.paths"><code class="docutils literal notranslate"><span class="pre">AppConfig.paths</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.processing"><code class="docutils literal notranslate"><span class="pre">AppConfig.processing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.AppConfig.to_file"><code class="docutils literal notranslate"><span class="pre">AppConfig.to_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.BaseSentenceGenerator"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.can_process"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.can_process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.category"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.do_translate"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.do_translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.exists_param"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.exists_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.get_format_in_config"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_format_in_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.get_int"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.get_sentence"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_sentence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.get_value"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.priority"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.BaseSentenceGenerator.process"><code class="docutils literal notranslate"><span class="pre">BaseSentenceGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ConfigError"><code class="docutils literal notranslate"><span class="pre">ConfigError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.EngineConfig"><code class="docutils literal notranslate"><span class="pre">EngineConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">EngineConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">EngineConfig.file_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineConfig.get_output_filename"><code class="docutils literal notranslate"><span class="pre">EngineConfig.get_output_filename()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineConfig.indent_size"><code class="docutils literal notranslate"><span class="pre">EngineConfig.indent_size</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.EngineError"><code class="docutils literal notranslate"><span class="pre">EngineError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.EngineNotRegisteredError"><code class="docutils literal notranslate"><span class="pre">EngineNotRegisteredError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.EngineProcessor"><code class="docutils literal notranslate"><span class="pre">EngineProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineProcessor.get_generator_manager"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.get_generator_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineProcessor.get_pipeline_info"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.get_pipeline_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineProcessor.process_row"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.process_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineProcessor.setup"><code class="docutils literal notranslate"><span class="pre">EngineProcessor.setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.EngineRegistry"><code class="docutils literal notranslate"><span class="pre">EngineRegistry</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineRegistry.get"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.get()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineRegistry.is_registered"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.is_registered()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineRegistry.list_engines"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.list_engines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineRegistry.register"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.EngineRegistry.reset"><code class="docutils literal notranslate"><span class="pre">EngineRegistry.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ExcelParseError"><code class="docutils literal notranslate"><span class="pre">ExcelParseError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.FileValidationError"><code class="docutils literal notranslate"><span class="pre">FileValidationError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.GeneratorError"><code class="docutils literal notranslate"><span class="pre">GeneratorError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.InvalidParameterError"><code class="docutils literal notranslate"><span class="pre">InvalidParameterError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.NaninovelConfig"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.NaninovelConfig.command_prefix"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.command_prefix</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.NaninovelConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.NaninovelConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">NaninovelConfig.file_extension</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ParamTranslator"><code class="docutils literal notranslate"><span class="pre">ParamTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.get_available_types"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_available_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.get_params_for_type"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_params_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.get_translations_for_type"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.get_translations_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.has_mapping"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.has_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.translate"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.translate_batch"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ParamTranslator.translate_varient"><code class="docutils literal notranslate"><span class="pre">ParamTranslator.translate_varient()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.PathConfig"><code class="docutils literal notranslate"><span class="pre">PathConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.PathConfig.ensure_dirs_exist"><code class="docutils literal notranslate"><span class="pre">PathConfig.ensure_dirs_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.PathConfig.input_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.input_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.PathConfig.log_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.log_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.PathConfig.output_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.output_dir</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.PathConfig.param_config_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.param_config_dir</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ProcessingConfig"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ProcessingConfig.batch_size"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.batch_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ProcessingConfig.enable_progress_bar"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.enable_progress_bar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ProcessingConfig.ignore_mode"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.ignore_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ProcessingConfig.ignore_words"><code class="docutils literal notranslate"><span class="pre">ProcessingConfig.ignore_words</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.RenpyConfig"><code class="docutils literal notranslate"><span class="pre">RenpyConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.RenpyConfig.default_transition"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.default_transition</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.RenpyConfig.engine_type"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.engine_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.RenpyConfig.file_extension"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.file_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.RenpyConfig.indent_size"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.indent_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.RenpyConfig.label_indent"><code class="docutils literal notranslate"><span class="pre">RenpyConfig.label_indent</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ScenarioToolError"><code class="docutils literal notranslate"><span class="pre">ScenarioToolError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.ScenarioToolLogger"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ScenarioToolLogger.get_logger"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.ScenarioToolLogger.reset"><code class="docutils literal notranslate"><span class="pre">ScenarioToolLogger.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.SentenceGeneratorManager"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.SentenceGeneratorManager.create_generator_instances"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.create_generator_instances()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.SentenceGeneratorManager.get_all_param_names"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.get_all_param_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.SentenceGeneratorManager.get_validate_params"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.get_validate_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="core.html#core.SentenceGeneratorManager.load"><code class="docutils literal notranslate"><span class="pre">SentenceGeneratorManager.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.TranslationError"><code class="docutils literal notranslate"><span class="pre">TranslationError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#core.register_engine"><code class="docutils literal notranslate"><span class="pre">register_engine()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="engines.html">engines package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="engines.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.html">engines.naninovel package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.html#module-engines.naninovel">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="engines.renpy.html">engines.renpy package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.renpy.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.renpy.html#module-engines.renpy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.html#module-engines">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="generate_scenario.html">generate_scenario module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html#generate_scenario.create_processor"><code class="docutils literal notranslate"><span class="pre">create_processor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html#generate_scenario.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html#generate_scenario.process_excel_file"><code class="docutils literal notranslate"><span class="pre">process_excel_file()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html#generate_scenario.write_output_file"><code class="docutils literal notranslate"><span class="pre">write_output_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="generate_test_data.html">generate_test_data module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="generate_test_data.html#generate_test_data.generate_test_data"><code class="docutils literal notranslate"><span class="pre">generate_test_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gui.html">gui package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gui.controllers.html">gui.controllers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gui.controllers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.controllers.html#module-gui.controllers.param_controller">gui.controllers.param_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.controllers.html#module-gui.controllers.resource_controller">gui.controllers.resource_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.controllers.html#module-gui.controllers.scenario_controller">gui.controllers.scenario_controller module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.controllers.html#module-gui.controllers">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gui.ui.html">gui.ui package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gui.ui.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.ui.html#module-gui.ui.main_window">gui.ui.main_window module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.ui.html#module-gui.ui">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gui.utils.html">gui.utils package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gui.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.utils.html#module-gui.utils.drag_drop_widgets">gui.utils.drag_drop_widgets module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.utils.html#module-gui.utils.log_handler">gui.utils.log_handler module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.utils.html#module-gui.utils.styles">gui.utils.styles module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gui.utils.html#module-gui.utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#module-gui.main">gui.main module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#gui.main.MainWindow"><code class="docutils literal notranslate"><span class="pre">MainWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gui.html#gui.main.MainWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">MainWindow.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#gui.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html#module-gui">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#gui.MainWindow"><code class="docutils literal notranslate"><span class="pre">MainWindow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gui.html#gui.MainWindow.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">MainWindow.staticMetaObject</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gui.html#gui.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="run_gui.html">run_gui module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sync_resources.html">sync_resources module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer.create_sync_plan"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer.create_sync_plan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer.execute_sync"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer.execute_sync()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer.find_in_source_library"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer.find_in_source_library()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer.read_validation_report"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer.read_validation_report()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sync_resources.html#sync_resources.ResourceSyncer.show_sync_plan"><code class="docutils literal notranslate"><span class="pre">ResourceSyncer.show_sync_plan()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html#sync_resources.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.html">tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html">tests.core package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_base_sentence_generator">tests.core.test_base_sentence_generator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_config_manager">tests.core.test_config_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_constants">tests.core.test_constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_engine_processor">tests.core.test_engine_processor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_engine_registry">tests.core.test_engine_registry module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_param_translator">tests.core.test_param_translator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core.test_sentence_generator_manager">tests.core.test_sentence_generator_manager module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#module-tests.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.engines.html">tests.engines package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.engines.html#module-tests.engines">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.gui.html">tests.gui package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.gui.html#module-tests.gui">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.conftest">tests.conftest module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.config_file_path"><code class="docutils literal notranslate"><span class="pre">config_file_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.param_config_dir"><code class="docutils literal notranslate"><span class="pre">param_config_dir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.project_root_path"><code class="docutils literal notranslate"><span class="pre">project_root_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.conftest.test_data_dir"><code class="docutils literal notranslate"><span class="pre">test_data_dir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests.test_param_updater">tests.test_param_updater module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.mock_config"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.test_collect_validation_data_merge_varient"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.test_collect_validation_data_merge_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_param_variable_name"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.test_generate_mappings_file_param_variable_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_varient_variable_name"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.test_generate_mappings_file_varient_variable_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestEdgeCases.updater"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases.updater()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.mock_config"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_read_error"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.test_collect_validation_data_with_read_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_varient_read_error"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.test_collect_validation_data_with_varient_read_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.test_generate_mappings_file_with_io_error"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.test_generate_mappings_file_with_io_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.test_read_param_file_with_exception"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.test_read_param_file_with_exception()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestExceptionHandling.updater"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling.updater()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.mock_config"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.mock_param_excel"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.mock_param_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.mock_varient_excel"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.mock_varient_excel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_collect_validation_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_empty_values"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_collect_validation_data_empty_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_file_not_exist"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_collect_validation_data_file_not_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_with_varient"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_collect_validation_data_with_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_generate_mappings_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file_varient"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_generate_mappings_file_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_init"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_missing_columns"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_read_param_file_missing_columns()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_not_exist"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_read_param_file_not_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_skip_template"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_read_param_file_skip_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_success"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_read_param_file_success()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_multiple_files"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_multiple_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_excel_files"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_no_excel_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_validation_data"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_no_validation_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdater.updater"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater.updater()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdaterIntegration"><code class="docutils literal notranslate"><span class="pre">TestParamUpdaterIntegration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdaterIntegration.full_setup"><code class="docutils literal notranslate"><span class="pre">TestParamUpdaterIntegration.full_setup()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestParamUpdaterIntegration.test_full_workflow"><code class="docutils literal notranslate"><span class="pre">TestParamUpdaterIntegration.test_full_workflow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.mock_config"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_empty_mappings"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.test_update_mappings_empty_mappings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_with_varient"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.test_update_mappings_success_with_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_without_varient"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.test_update_mappings_success_without_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.html#tests.test_param_updater.TestUpdateMappingsMethod.updater"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod.updater()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html#module-tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="update_param.html">update_param module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html#update_param.ParamUpdater"><code class="docutils literal notranslate"><span class="pre">ParamUpdater</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.collect_validation_data"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.collect_validation_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.generate_mappings_file"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.generate_mappings_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.get_all_validate_params"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.get_all_validate_params()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.read_param_file"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.read_param_file()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.update_mappings"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.update_mappings()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="update_param.html#update_param.ParamUpdater.update_scenario_param_sheets"><code class="docutils literal notranslate"><span class="pre">ParamUpdater.update_scenario_param_sheets()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html#update_param.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="validate_resources.html">validate_resources module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html#validate_resources.ResourceValidator"><code class="docutils literal notranslate"><span class="pre">ResourceValidator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="validate_resources.html#validate_resources.ResourceValidator.check_resources_exist"><code class="docutils literal notranslate"><span class="pre">ResourceValidator.check_resources_exist()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate_resources.html#validate_resources.ResourceValidator.collect_resources_from_excel"><code class="docutils literal notranslate"><span class="pre">ResourceValidator.collect_resources_from_excel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="validate_resources.html#validate_resources.ResourceValidator.generate_report"><code class="docutils literal notranslate"><span class="pre">ResourceValidator.generate_report()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html#validate_resources.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html#validate_resources.validate_excel_file"><code class="docutils literal notranslate"><span class="pre">validate_excel_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="index.html" class="btn btn-neutral float-left" title="scenario_tool documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="core.html" class="btn btn-neutral float-right" title="core package" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

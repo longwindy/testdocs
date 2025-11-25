@@ -1,0 +1,7 @@
+validate\_resources module
+==========================
+
+.. automodule:: validate_resources
+   :members:
+   :show-inheritance:
+   :undoc-members:

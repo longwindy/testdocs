@@ -1,0 +1,841 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests package &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=34969b80"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="tests.core package" href="tests.core.html" />
+    <link rel="prev" title="sync_resources module" href="sync_resources.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">scenario_tool</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engines.html">engines package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html">generate_scenario module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_test_data.html">generate_test_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html">gui package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_gui.html">run_gui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html">sync_resources module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">tests package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html">tests.core package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.engines.html">tests.engines package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.gui.html">tests.gui package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.conftest">tests.conftest module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.config_file_path"><code class="docutils literal notranslate"><span class="pre">config_file_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.param_config_dir"><code class="docutils literal notranslate"><span class="pre">param_config_dir()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.project_root_path"><code class="docutils literal notranslate"><span class="pre">project_root_path()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.conftest.test_data_dir"><code class="docutils literal notranslate"><span class="pre">test_data_dir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests.test_param_updater">tests.test_param_updater module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_param_updater.TestEdgeCases"><code class="docutils literal notranslate"><span class="pre">TestEdgeCases</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_param_updater.TestExceptionHandling"><code class="docutils literal notranslate"><span class="pre">TestExceptionHandling</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_param_updater.TestParamUpdater"><code class="docutils literal notranslate"><span class="pre">TestParamUpdater</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_param_updater.TestParamUpdaterIntegration"><code class="docutils literal notranslate"><span class="pre">TestParamUpdaterIntegration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tests.test_param_updater.TestUpdateMappingsMethod"><code class="docutils literal notranslate"><span class="pre">TestUpdateMappingsMethod</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-tests">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html">update_param module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html">validate_resources module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">scenario_tool</a></li>
+      <li class="breadcrumb-item active">tests package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tests.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tests-package">
+<h1>tests package<a class="headerlink" href="#tests-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tests.core.html">tests.core package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_base_sentence_generator">tests.core.test_base_sentence_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.ConcreteSentenceGenerator"><code class="docutils literal notranslate"><span class="pre">ConcreteSentenceGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.ConcreteSentenceGenerator.category"><code class="docutils literal notranslate"><span class="pre">ConcreteSentenceGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.ConcreteSentenceGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">ConcreteSentenceGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.ConcreteSentenceGenerator.process"><code class="docutils literal notranslate"><span class="pre">ConcreteSentenceGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.generator"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.generator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.mock_config"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_can_process"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_can_process()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_category_property"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_category_property()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_do_translate_empty_value"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_do_translate_empty_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_do_translate_multiple_types"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_do_translate_multiple_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_do_translate_no_config"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_do_translate_no_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_do_translate_preserves_original"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_do_translate_preserves_original()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_do_translate_single_type"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_do_translate_single_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_exists_param"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_exists_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_get_format_in_config"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_get_format_in_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_get_int"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_get_int()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_get_sentence"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_get_sentence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_get_value"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_get_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_init"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_priority_default"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_priority_default()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_process_method"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_process_method()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_process_with_empty_data"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_process_with_empty_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestBaseSentenceGenerator.test_repr"><code class="docutils literal notranslate"><span class="pre">TestBaseSentenceGenerator.test_repr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestPriorityExtraction"><code class="docutils literal notranslate"><span class="pre">TestPriorityExtraction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestPriorityExtraction.mock_config"><code class="docutils literal notranslate"><span class="pre">TestPriorityExtraction.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestPriorityExtraction.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestPriorityExtraction.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestPriorityExtraction.test_priority_with_prefix"><code class="docutils literal notranslate"><span class="pre">TestPriorityExtraction.test_priority_with_prefix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestPriorityExtraction.test_priority_without_prefix"><code class="docutils literal notranslate"><span class="pre">TestPriorityExtraction.test_priority_without_prefix()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestTranslateMultipleTypes"><code class="docutils literal notranslate"><span class="pre">TestTranslateMultipleTypes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestTranslateMultipleTypes.generator_with_multi_types"><code class="docutils literal notranslate"><span class="pre">TestTranslateMultipleTypes.generator_with_multi_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestTranslateMultipleTypes.test_translate_first_match"><code class="docutils literal notranslate"><span class="pre">TestTranslateMultipleTypes.test_translate_first_match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestTranslateMultipleTypes.test_translate_no_match"><code class="docutils literal notranslate"><span class="pre">TestTranslateMultipleTypes.test_translate_no_match()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_base_sentence_generator.TestTranslateMultipleTypes.test_translate_second_match"><code class="docutils literal notranslate"><span class="pre">TestTranslateMultipleTypes.test_translate_second_match()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_config_manager">tests.core.test_config_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig"><code class="docutils literal notranslate"><span class="pre">TestAppConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_invalid_engine"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_create_default_invalid_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_naninovel"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_create_default_naninovel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_renpy"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_create_default_renpy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_default_config"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_default_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_invalid_engine"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_invalid_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_minimal"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_minimal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_engine_string"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_with_engine_string()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_naninovel_engine"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_with_naninovel_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_paths"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_with_paths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_processing"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_with_processing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_renpy_engine"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_dict_with_renpy_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_invalid_format"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_file_invalid_format()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_json"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_file_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_yaml"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_file_yaml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_yml_extension"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_from_file_yml_extension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_roundtrip_json"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_roundtrip_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_roundtrip_yaml"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_roundtrip_yaml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_json"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_to_file_json()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_yaml"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_to_file_yaml()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_yml_extension"><code class="docutils literal notranslate"><span class="pre">TestAppConfig.test_to_file_yml_extension()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestEngineConfig"><code class="docutils literal notranslate"><span class="pre">TestEngineConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestEngineConfig.test_get_output_filename"><code class="docutils literal notranslate"><span class="pre">TestEngineConfig.test_get_output_filename()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestNaninovelConfig"><code class="docutils literal notranslate"><span class="pre">TestNaninovelConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestNaninovelConfig.test_default_config"><code class="docutils literal notranslate"><span class="pre">TestNaninovelConfig.test_default_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestNaninovelConfig.test_get_output_filename"><code class="docutils literal notranslate"><span class="pre">TestNaninovelConfig.test_get_output_filename()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestPathConfig"><code class="docutils literal notranslate"><span class="pre">TestPathConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestPathConfig.test_custom_paths"><code class="docutils literal notranslate"><span class="pre">TestPathConfig.test_custom_paths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestPathConfig.test_default_paths"><code class="docutils literal notranslate"><span class="pre">TestPathConfig.test_default_paths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestPathConfig.test_ensure_dirs_exist"><code class="docutils literal notranslate"><span class="pre">TestPathConfig.test_ensure_dirs_exist()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestPathConfig.test_post_init_converts_to_path"><code class="docutils literal notranslate"><span class="pre">TestPathConfig.test_post_init_converts_to_path()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestProcessingConfig"><code class="docutils literal notranslate"><span class="pre">TestProcessingConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestProcessingConfig.test_custom_config"><code class="docutils literal notranslate"><span class="pre">TestProcessingConfig.test_custom_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestProcessingConfig.test_default_config"><code class="docutils literal notranslate"><span class="pre">TestProcessingConfig.test_default_config()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestRenpyConfig"><code class="docutils literal notranslate"><span class="pre">TestRenpyConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestRenpyConfig.test_default_config"><code class="docutils literal notranslate"><span class="pre">TestRenpyConfig.test_default_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_config_manager.TestRenpyConfig.test_get_output_filename"><code class="docutils literal notranslate"><span class="pre">TestRenpyConfig.test_get_output_filename()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_constants">tests.core.test_constants module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestDefaultConstants"><code class="docutils literal notranslate"><span class="pre">TestDefaultConstants</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestDefaultConstants.test_default_constants"><code class="docutils literal notranslate"><span class="pre">TestDefaultConstants.test_default_constants()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumComparison"><code class="docutils literal notranslate"><span class="pre">TestEnumComparison</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumComparison.test_enum_equality"><code class="docutils literal notranslate"><span class="pre">TestEnumComparison.test_enum_equality()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumComparison.test_enum_string_comparison"><code class="docutils literal notranslate"><span class="pre">TestEnumComparison.test_enum_string_comparison()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumIteration"><code class="docutils literal notranslate"><span class="pre">TestEnumIteration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumIteration.test_enum_iteration"><code class="docutils literal notranslate"><span class="pre">TestEnumIteration.test_enum_iteration()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumMembers"><code class="docutils literal notranslate"><span class="pre">TestEnumMembers</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumMembers.test_enum_members"><code class="docutils literal notranslate"><span class="pre">TestEnumMembers.test_enum_members()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumValues"><code class="docutils literal notranslate"><span class="pre">TestEnumValues</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestEnumValues.test_enum_values_and_types"><code class="docutils literal notranslate"><span class="pre">TestEnumValues.test_enum_values_and_types()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestFileExtensions"><code class="docutils literal notranslate"><span class="pre">TestFileExtensions</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestFileExtensions.test_engine_extensions"><code class="docutils literal notranslate"><span class="pre">TestFileExtensions.test_engine_extensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestFileExtensions.test_excel_extensions"><code class="docutils literal notranslate"><span class="pre">TestFileExtensions.test_excel_extensions()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestTempFilePrefix"><code class="docutils literal notranslate"><span class="pre">TestTempFilePrefix</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_constants.TestTempFilePrefix.test_temp_file_prefix"><code class="docutils literal notranslate"><span class="pre">TestTempFilePrefix.test_temp_file_prefix()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_engine_processor">tests.core.test_engine_processor module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.BrokenGenerator"><code class="docutils literal notranslate"><span class="pre">BrokenGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.BrokenGenerator.category"><code class="docutils literal notranslate"><span class="pre">BrokenGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.BrokenGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">BrokenGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.BrokenGenerator.priority"><code class="docutils literal notranslate"><span class="pre">BrokenGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.BrokenGenerator.process"><code class="docutils literal notranslate"><span class="pre">BrokenGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator"><code class="docutils literal notranslate"><span class="pre">MockDialogueGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator.category"><code class="docutils literal notranslate"><span class="pre">MockDialogueGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">MockDialogueGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator.priority"><code class="docutils literal notranslate"><span class="pre">MockDialogueGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator.process"><code class="docutils literal notranslate"><span class="pre">MockDialogueGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockMusicGenerator"><code class="docutils literal notranslate"><span class="pre">MockMusicGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockMusicGenerator.category"><code class="docutils literal notranslate"><span class="pre">MockMusicGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockMusicGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">MockMusicGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockMusicGenerator.priority"><code class="docutils literal notranslate"><span class="pre">MockMusicGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockMusicGenerator.process"><code class="docutils literal notranslate"><span class="pre">MockMusicGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockSceneGenerator"><code class="docutils literal notranslate"><span class="pre">MockSceneGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockSceneGenerator.category"><code class="docutils literal notranslate"><span class="pre">MockSceneGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockSceneGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">MockSceneGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockSceneGenerator.priority"><code class="docutils literal notranslate"><span class="pre">MockSceneGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.MockSceneGenerator.process"><code class="docutils literal notranslate"><span class="pre">MockSceneGenerator.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_config"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_generator_manager"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.mock_generator_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.processor"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.processor()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.test_build_generator_param_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map_no_param_config"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.test_build_generator_param_map_no_param_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map_none_param_config"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.test_build_generator_param_map_none_param_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_init"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.test_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_setup"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessor.test_setup()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessorIntegration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.mock_config"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessorIntegration.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessorIntegration.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.test_full_workflow"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessorIntegration.test_full_workflow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.test_multiple_rows_processing"><code class="docutils literal notranslate"><span class="pre">TestEngineProcessorIntegration.test_multiple_rows_processing()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.mock_config"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.processor_with_generators"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.processor_with_generators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_generator_manager"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.test_get_generator_manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.test_get_pipeline_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info_empty"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.test_get_pipeline_info_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info_with_category"><code class="docutils literal notranslate"><span class="pre">TestPipelineInfo.test_get_pipeline_info_with_category()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow"><code class="docutils literal notranslate"><span class="pre">TestProcessRow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.mock_config"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.processor_with_generators"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.processor_with_generators()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_empty_row"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_empty_row()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_generator_returns_empty"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_generator_returns_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_all_params"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_all_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_empty_values"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_empty_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_generator_error"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_generator_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_nan_values"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_nan_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_no_matching_params"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_no_matching_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_partial_params"><code class="docutils literal notranslate"><span class="pre">TestProcessRow.test_process_row_with_partial_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_engine_registry">tests.core.test_engine_registry module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineMetadata"><code class="docutils literal notranslate"><span class="pre">TestEngineMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineMetadata.test_create_metadata"><code class="docutils literal notranslate"><span class="pre">TestEngineMetadata.test_create_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineMetadata.test_create_metadata_without_optional_fields"><code class="docutils literal notranslate"><span class="pre">TestEngineMetadata.test_create_metadata_without_optional_fields()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.reset_registry"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.reset_registry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_get_registered_engine"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_get_registered_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_get_unregistered_engine"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_get_unregistered_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_is_registered_false"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_is_registered_false()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_is_registered_true"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_is_registered_true()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_empty"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_list_engines_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_returns_copy"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_list_engines_returns_copy()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_with_multiple_engines"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_list_engines_with_multiple_engines()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_register_duplicate_engine"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_register_duplicate_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_register_engine"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_register_engine()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_reset_registry"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_reset_registry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_singleton_pattern"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistry.test_singleton_pattern()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistryIntegration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.reset_registry"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistryIntegration.reset_registry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.test_full_workflow"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistryIntegration.test_full_workflow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.test_multiple_engines_workflow"><code class="docutils literal notranslate"><span class="pre">TestEngineRegistryIntegration.test_multiple_engines_workflow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.reset_registry"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator.reset_registry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_basic"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator.test_register_engine_decorator_basic()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_preserves_function"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator.test_register_engine_decorator_preserves_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_with_all_params"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator.test_register_engine_decorator_with_all_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_multiple_engines_with_decorator"><code class="docutils literal notranslate"><span class="pre">TestRegisterEngineDecorator.test_register_multiple_engines_with_decorator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_param_translator">tests.core.test_param_translator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.mock_param_mappings_file"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.mock_param_mappings_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.mock_varient_mappings_file"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.mock_varient_mappings_file()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_available_types"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_get_available_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_params_for_type"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_get_params_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_translations_for_type"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_get_translations_for_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_has_mapping"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_has_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_init_success"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_init_success()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_init_with_missing_files"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_init_with_missing_files()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_special_characters_in_param"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_special_characters_in_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_translate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_batch"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_translate_batch()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_batch_with_missing_params"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_translate_batch_with_missing_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_varient"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.test_translate_varient()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_param_translator.TestParamTranslator.translator"><code class="docutils literal notranslate"><span class="pre">TestParamTranslator.translator()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core.test_sentence_generator_manager">tests.core.test_sentence_generator_manager module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator1"><code class="docutils literal notranslate"><span class="pre">MockGenerator1</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator1.category"><code class="docutils literal notranslate"><span class="pre">MockGenerator1.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator1.param_config"><code class="docutils literal notranslate"><span class="pre">MockGenerator1.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator1.priority"><code class="docutils literal notranslate"><span class="pre">MockGenerator1.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator1.process"><code class="docutils literal notranslate"><span class="pre">MockGenerator1.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator2"><code class="docutils literal notranslate"><span class="pre">MockGenerator2</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator2.category"><code class="docutils literal notranslate"><span class="pre">MockGenerator2.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator2.param_config"><code class="docutils literal notranslate"><span class="pre">MockGenerator2.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator2.priority"><code class="docutils literal notranslate"><span class="pre">MockGenerator2.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator2.process"><code class="docutils literal notranslate"><span class="pre">MockGenerator2.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator3"><code class="docutils literal notranslate"><span class="pre">MockGenerator3</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator3.category"><code class="docutils literal notranslate"><span class="pre">MockGenerator3.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator3.priority"><code class="docutils literal notranslate"><span class="pre">MockGenerator3.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.MockGenerator3.process"><code class="docutils literal notranslate"><span class="pre">MockGenerator3.process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.manager"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.mock_config"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.test_create_generator_instances"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.test_create_generator_instances()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.test_create_generator_instances_calls_load"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.test_create_generator_instances_calls_load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.test_create_generator_instances_empty"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.test_create_generator_instances_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.test_create_generator_instances_sorted_by_priority"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.test_create_generator_instances_sorted_by_priority()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestCreateGeneratorInstances.test_create_generator_instances_with_error"><code class="docutils literal notranslate"><span class="pre">TestCreateGeneratorInstances.test_create_generator_instances_with_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.manager"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.test_discover_generator_classes_import_error"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.test_discover_generator_classes_import_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.test_discover_generator_classes_manual_add"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.test_discover_generator_classes_manual_add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.test_discover_generator_classes_module_import_error"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.test_discover_generator_classes_module_import_error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.test_discover_generator_classes_skip_non_generator_modules"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.test_discover_generator_classes_skip_non_generator_modules()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestDiscoverGeneratorClasses.test_discover_generator_classes_skip_packages"><code class="docutils literal notranslate"><span class="pre">TestDiscoverGeneratorClasses.test_discover_generator_classes_skip_packages()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.manager"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_collect_param_configs"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_collect_param_configs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_collect_param_configs_empty"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_collect_param_configs_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_collect_param_configs_no_param_config"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_collect_param_configs_no_param_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_get_all_param_names"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_get_all_param_names()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_get_all_param_names_calls_load"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_get_all_param_names_calls_load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_get_all_param_names_empty"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_get_all_param_names_empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_init"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_init()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_is_generator_class"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_is_generator_class()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_is_generator_class_not_subclass"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_is_generator_class_not_subclass()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManager.test_load_only_once"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManager.test_load_only_once()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.manager"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.manager()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.mock_config"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.mock_config()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.mock_translator"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.mock_translator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.test_full_workflow"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.test_full_workflow()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.test_load_idempotent"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.test_load_idempotent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="tests.core.html#tests.core.test_sentence_generator_manager.TestSentenceGeneratorManagerIntegration.test_param_configs_merge"><code class="docutils literal notranslate"><span class="pre">TestSentenceGeneratorManagerIntegration.test_param_configs_merge()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tests.core.html#module-tests.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.engines.html">tests.engines package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.engines.html#module-tests.engines">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tests.gui.html">tests.gui package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tests.gui.html#module-tests.gui">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-tests.conftest">
+<span id="tests-conftest-module"></span><h2>tests.conftest module<a class="headerlink" href="#module-tests.conftest" title="Link to this heading"></a></h2>
+<p>pytest 配置文件
+提供共享的 fixtures 和测试配置</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.config_file_path">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">config_file_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_root_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/conftest.html#config_file_path"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.conftest.config_file_path" title="Link to this definition"></a></dt>
+<dd><p>返回配置文件路径</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.param_config_dir">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">param_config_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">project_root_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/conftest.html#param_config_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.conftest.param_config_dir" title="Link to this definition"></a></dt>
+<dd><p>返回参数配置目录路径</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.project_root_path">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">project_root_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/conftest.html#project_root_path"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.conftest.project_root_path" title="Link to this definition"></a></dt>
+<dd><p>返回项目根目录路径</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tests.conftest.test_data_dir">
+<span class="sig-prename descclassname"><span class="pre">tests.conftest.</span></span><span class="sig-name descname"><span class="pre">test_data_dir</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/conftest.html#test_data_dir"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.conftest.test_data_dir" title="Link to this definition"></a></dt>
+<dd><p>返回测试数据目录路径</p>
+</dd></dl>
+
+</section>
+<section id="module-tests.test_param_updater">
+<span id="tests-test-param-updater-module"></span><h2>tests.test_param_updater module<a class="headerlink" href="#module-tests.test_param_updater" title="Link to this heading"></a></h2>
+<p>测试 ParamUpdater 类</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_param_updater.</span></span><span class="sig-name descname"><span class="pre">TestEdgeCases</span></span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases" title="Link to this definition"></a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>测试边界情况</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.mock_config">
+<span class="sig-name descname"><span class="pre">mock_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.mock_config"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.mock_config" title="Link to this definition"></a></dt>
+<dd><p>创建模拟配置</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.test_collect_validation_data_merge_varient">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_merge_varient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.test_collect_validation_data_merge_varient"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.test_collect_validation_data_merge_varient" title="Link to this definition"></a></dt>
+<dd><p>测试合并差分参数到 Varient 列</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_param_variable_name">
+<span class="sig-name descname"><span class="pre">test_generate_mappings_file_param_variable_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.test_generate_mappings_file_param_variable_name"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_param_variable_name" title="Link to this definition"></a></dt>
+<dd><p>测试生成参数映射文件时使用正确的变量名</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_varient_variable_name">
+<span class="sig-name descname"><span class="pre">test_generate_mappings_file_varient_variable_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.test_generate_mappings_file_varient_variable_name"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_varient_variable_name" title="Link to this definition"></a></dt>
+<dd><p>测试生成差分映射文件时使用正确的变量名</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_named_range_already_correct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct" title="Link to this definition"></a></dt>
+<dd><p>测试命名区域已经正确时不更新</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestEdgeCases.updater">
+<span class="sig-name descname"><span class="pre">updater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestEdgeCases.updater"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestEdgeCases.updater" title="Link to this definition"></a></dt>
+<dd><p>创建更新器实例</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_param_updater.</span></span><span class="sig-name descname"><span class="pre">TestExceptionHandling</span></span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling" title="Link to this definition"></a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>测试异常处理</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.mock_config">
+<span class="sig-name descname"><span class="pre">mock_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.mock_config"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.mock_config" title="Link to this definition"></a></dt>
+<dd><p>创建模拟配置</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_read_error">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_with_read_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.test_collect_validation_data_with_read_error"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_read_error" title="Link to this definition"></a></dt>
+<dd><p>测试收集验证数据时读取失败</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_varient_read_error">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_with_varient_read_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.test_collect_validation_data_with_varient_read_error"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_varient_read_error" title="Link to this definition"></a></dt>
+<dd><p>测试收集验证数据时差分文件读取失败</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.test_generate_mappings_file_with_io_error">
+<span class="sig-name descname"><span class="pre">test_generate_mappings_file_with_io_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.test_generate_mappings_file_with_io_error"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.test_generate_mappings_file_with_io_error" title="Link to this definition"></a></dt>
+<dd><p>测试生成映射文件时发生 IO 错误</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.test_read_param_file_with_exception">
+<span class="sig-name descname"><span class="pre">test_read_param_file_with_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.test_read_param_file_with_exception"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.test_read_param_file_with_exception" title="Link to this definition"></a></dt>
+<dd><p>测试读取参数文件时发生异常</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestExceptionHandling.updater">
+<span class="sig-name descname"><span class="pre">updater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestExceptionHandling.updater"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestExceptionHandling.updater" title="Link to this definition"></a></dt>
+<dd><p>创建更新器实例</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_param_updater.</span></span><span class="sig-name descname"><span class="pre">TestParamUpdater</span></span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater" title="Link to this definition"></a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>测试 ParamUpdater 类</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.mock_config">
+<span class="sig-name descname"><span class="pre">mock_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.mock_config"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.mock_config" title="Link to this definition"></a></dt>
+<dd><p>创建模拟的配置对象</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.mock_param_excel">
+<span class="sig-name descname"><span class="pre">mock_param_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.mock_param_excel"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.mock_param_excel" title="Link to this definition"></a></dt>
+<dd><p>创建模拟的参数 Excel 文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.mock_varient_excel">
+<span class="sig-name descname"><span class="pre">mock_varient_excel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.mock_varient_excel"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.mock_varient_excel" title="Link to this definition"></a></dt>
+<dd><p>创建模拟的差分参数 Excel 文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_collect_validation_data">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_param_excel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_collect_validation_data"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_collect_validation_data" title="Link to this definition"></a></dt>
+<dd><p>测试收集验证数据</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_collect_validation_data_empty_values">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_empty_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_collect_validation_data_empty_values"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_empty_values" title="Link to this definition"></a></dt>
+<dd><p>测试处理空值和空字符串</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_collect_validation_data_file_not_exist">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_file_not_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_collect_validation_data_file_not_exist"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_file_not_exist" title="Link to this definition"></a></dt>
+<dd><p>测试文件不存在时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_collect_validation_data_with_varient">
+<span class="sig-name descname"><span class="pre">test_collect_validation_data_with_varient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_param_excel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_varient_excel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_collect_validation_data_with_varient"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_with_varient" title="Link to this definition"></a></dt>
+<dd><p>测试收集验证数据（包含差分参数）</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_generate_mappings_file">
+<span class="sig-name descname"><span class="pre">test_generate_mappings_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_generate_mappings_file"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file" title="Link to this definition"></a></dt>
+<dd><p>测试生成映射文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_generate_mappings_file_varient">
+<span class="sig-name descname"><span class="pre">test_generate_mappings_file_varient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_generate_mappings_file_varient"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file_varient" title="Link to this definition"></a></dt>
+<dd><p>测试生成差分映射文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_init">
+<span class="sig-name descname"><span class="pre">test_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_init"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_init" title="Link to this definition"></a></dt>
+<dd><p>测试初始化</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_read_param_file_missing_columns">
+<span class="sig-name descname"><span class="pre">test_read_param_file_missing_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_read_param_file_missing_columns"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_read_param_file_missing_columns" title="Link to this definition"></a></dt>
+<dd><p>测试缺少必需列的工作表</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_read_param_file_not_exist">
+<span class="sig-name descname"><span class="pre">test_read_param_file_not_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_read_param_file_not_exist"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_read_param_file_not_exist" title="Link to this definition"></a></dt>
+<dd><p>测试读取不存在的文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_read_param_file_skip_template">
+<span class="sig-name descname"><span class="pre">test_read_param_file_skip_template</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_read_param_file_skip_template"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_read_param_file_skip_template" title="Link to this definition"></a></dt>
+<dd><p>测试跳过模板工作表</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_read_param_file_success">
+<span class="sig-name descname"><span class="pre">test_read_param_file_success</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mock_param_excel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_read_param_file_success"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_read_param_file_success" title="Link to this definition"></a></dt>
+<dd><p>测试成功读取参数文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_input_dir_not_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist" title="Link to this definition"></a></dt>
+<dd><p>测试输入目录不存在时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_multiple_files">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_multiple_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_multiple_files"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_multiple_files" title="Link to this definition"></a></dt>
+<dd><p>测试同时处理多个 Excel 文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_no_changes_needed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed" title="Link to this definition"></a></dt>
+<dd><p>测试当参数表已经是最新时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_excel_files">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_no_excel_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_no_excel_files"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_excel_files" title="Link to this definition"></a></dt>
+<dd><p>测试没有 Excel 文件时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_validation_data">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_no_validation_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_no_validation_data"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_validation_data" title="Link to this definition"></a></dt>
+<dd><p>测试没有验证数据时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_skip_temp_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files" title="Link to this definition"></a></dt>
+<dd><p>测试跳过临时文件（以 ~ 开头）</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_with_named_ranges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges" title="Link to this definition"></a></dt>
+<dd><p>测试创建命名区域</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_with_param_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet" title="Link to this definition"></a></dt>
+<dd><p>测试更新包含参数表的 Excel 文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet">
+<span class="sig-name descname"><span class="pre">test_update_scenario_param_sheets_without_param_sheet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet" title="Link to this definition"></a></dt>
+<dd><p>测试处理没有参数表的 Excel 文件</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdater.updater">
+<span class="sig-name descname"><span class="pre">updater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdater.updater"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdater.updater" title="Link to this definition"></a></dt>
+<dd><p>创建 ParamUpdater 实例</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdaterIntegration">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_param_updater.</span></span><span class="sig-name descname"><span class="pre">TestParamUpdaterIntegration</span></span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdaterIntegration"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdaterIntegration" title="Link to this definition"></a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>集成测试：测试完整的参数更新流程</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdaterIntegration.full_setup">
+<span class="sig-name descname"><span class="pre">full_setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdaterIntegration.full_setup"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdaterIntegration.full_setup" title="Link to this definition"></a></dt>
+<dd><p>创建完整的测试环境</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestParamUpdaterIntegration.test_full_workflow">
+<span class="sig-name descname"><span class="pre">test_full_workflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">full_setup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestParamUpdaterIntegration.test_full_workflow"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestParamUpdaterIntegration.test_full_workflow" title="Link to this definition"></a></dt>
+<dd><p>测试完整的工作流程</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">tests.test_param_updater.</span></span><span class="sig-name descname"><span class="pre">TestUpdateMappingsMethod</span></span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod" title="Link to this definition"></a></dt>
+<dd><p>基类：<code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>测试 update_mappings 方法</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.mock_config">
+<span class="sig-name descname"><span class="pre">mock_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.mock_config"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.mock_config" title="Link to this definition"></a></dt>
+<dd><p>创建模拟配置</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_empty_mappings">
+<span class="sig-name descname"><span class="pre">test_update_mappings_empty_mappings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.test_update_mappings_empty_mappings"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_empty_mappings" title="Link to this definition"></a></dt>
+<dd><p>测试参数文件为空时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist">
+<span class="sig-name descname"><span class="pre">test_update_mappings_param_file_not_exist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist" title="Link to this definition"></a></dt>
+<dd><p>测试参数文件不存在时的行为</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_with_varient">
+<span class="sig-name descname"><span class="pre">test_update_mappings_success_with_varient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.test_update_mappings_success_with_varient"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_with_varient" title="Link to this definition"></a></dt>
+<dd><p>测试成功更新映射（有差分文件）</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_without_varient">
+<span class="sig-name descname"><span class="pre">test_update_mappings_success_without_varient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.test_update_mappings_success_without_varient"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_without_varient" title="Link to this definition"></a></dt>
+<dd><p>测试成功更新映射（没有差分文件）</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets">
+<span class="sig-name descname"><span class="pre">test_update_mappings_with_scenario_param_sheets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updater</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmp_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets" title="Link to this definition"></a></dt>
+<dd><p>测试更新映射并更新演出表格</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="tests.test_param_updater.TestUpdateMappingsMethod.updater">
+<span class="sig-name descname"><span class="pre">updater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mock_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_param_updater.html#TestUpdateMappingsMethod.updater"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#tests.test_param_updater.TestUpdateMappingsMethod.updater" title="Link to this definition"></a></dt>
+<dd><p>创建更新器实例</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-tests" title="Link to this heading"></a></h2>
+<p>Tests for Scenario Tool</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="sync_resources.html" class="btn btn-neutral float-left" title="sync_resources module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="tests.core.html" class="btn btn-neutral float-right" title="tests.core package" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

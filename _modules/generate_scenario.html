@@ -1,0 +1,317 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>generate_scenario &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">generate_scenario</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>generate_scenario 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">场景脚本生成主程序</span>
+<span class="sd">从 Excel 文件生成视觉小说引擎脚本</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+<span class="kn">from</span> <span class="nn">core.param_translator</span> <span class="kn">import</span> <span class="n">ParamTranslator</span>
+<span class="kn">from</span> <span class="nn">core.engine_registry</span> <span class="kn">import</span> <span class="n">EngineRegistry</span>
+<span class="kn">from</span> <span class="nn">core.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">core.exceptions</span> <span class="kn">import</span> <span class="n">ExcelParseError</span><span class="p">,</span> <span class="n">GeneratorError</span>
+<span class="kn">from</span> <span class="nn">core.constants</span> <span class="kn">import</span> <span class="n">SheetName</span><span class="p">,</span> <span class="n">ColumnName</span><span class="p">,</span> <span class="n">Marker</span><span class="p">,</span> <span class="n">TEMP_FILE_PREFIX</span>
+
+<span class="c1"># 导入引擎模块以触发注册</span>
+<span class="kn">import</span> <span class="nn">engines.renpy</span>
+<span class="kn">import</span> <span class="nn">engines.naninovel</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="create_processor">
+<a class="viewcode-back" href="../generate_scenario.html#generate_scenario.create_processor">[文档]</a>
+<span class="k">def</span> <span class="nf">create_processor</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    创建处理器实例</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: 应用配置</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        处理器实例</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 创建翻译器</span>
+    <span class="n">translator</span> <span class="o">=</span> <span class="n">ParamTranslator</span><span class="p">(</span>
+        <span class="n">module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span><span class="p">),</span>
+        <span class="n">varient_module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;varient_mappings.py&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1"># 从注册表获取引擎元数据</span>
+    <span class="n">engine_meta</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span><span class="p">)</span>
+
+    <span class="c1"># 使用工厂函数创建处理器</span>
+    <span class="n">processor</span> <span class="o">=</span> <span class="n">engine_meta</span><span class="o">.</span><span class="n">processor_factory</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">translator</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">processor</span></div>
+
+
+
+<div class="viewcode-block" id="process_excel_file">
+<a class="viewcode-back" href="../generate_scenario.html#generate_scenario.process_excel_file">[文档]</a>
+<span class="k">def</span> <span class="nf">process_excel_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    处理单个Excel文件</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file_path: Excel 文件路径</span>
+<span class="sd">        config: 应用配置</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;开始处理文件: </span><span class="si">{</span><span class="n">file_path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">create_processor</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># 读取Excel文件</span>
+        <span class="n">excel_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">sheet_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">excel_data</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="c1"># 获取文件基本名（不含扩展名）</span>
+        <span class="n">file_basename</span> <span class="o">=</span> <span class="n">file_path</span><span class="o">.</span><span class="n">stem</span>
+
+        <span class="c1"># 处理每个工作表</span>
+        <span class="k">for</span> <span class="n">sheet</span> <span class="ow">in</span> <span class="n">sheet_names</span><span class="p">:</span>
+            <span class="c1"># 跳过参数表</span>
+            <span class="k">if</span> <span class="n">sheet</span> <span class="o">==</span> <span class="n">SheetName</span><span class="o">.</span><span class="n">PARAM_SHEET</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;跳过参数表: </span><span class="si">{</span><span class="n">sheet</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># 生成输出文件名</span>
+            <span class="n">scenario_name</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">get_output_filename</span><span class="p">(</span><span class="n">sheet</span><span class="p">)</span>
+
+            <span class="c1"># 检查结束标记</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">NOTE</span><span class="o">.</span><span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excel_data</span><span class="p">[</span><span class="n">sheet</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span>
+                    <span class="n">Marker</span><span class="o">.</span><span class="n">END</span><span class="o">.</span><span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excel_data</span><span class="p">[</span><span class="n">sheet</span><span class="p">][</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">NOTE</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;工作表 </span><span class="si">{</span><span class="n">sheet</span><span class="si">}</span><span class="s2"> 不包含Note列或END标记，跳过&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># 找到 END 标记的位置</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="n">excel_data</span><span class="p">[</span><span class="n">sheet</span><span class="p">][</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">NOTE</span><span class="o">.</span><span class="n">value</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">Marker</span><span class="o">.</span><span class="n">END</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="c1"># 提取需要处理的行</span>
+            <span class="n">valid_indices</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">end_index</span><span class="p">):</span>
+                <span class="c1"># 检查是否需要忽略</span>
+                <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">ignore_mode</span><span class="p">:</span>
+                    <span class="n">ignore_value</span> <span class="o">=</span> <span class="n">excel_data</span><span class="p">[</span><span class="n">sheet</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">IGNORE</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">ignore_value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">ignore_words</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;忽略行 </span><span class="si">{</span><span class="n">j</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ignore_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                <span class="n">valid_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+
+            <span class="c1"># 获取有效行数据</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_indices</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;工作表 </span><span class="si">{</span><span class="n">sheet</span><span class="si">}</span><span class="s2"> 没有有效数据&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">valid_rows_df</span> <span class="o">=</span> <span class="n">excel_data</span><span class="p">[</span><span class="n">sheet</span><span class="p">]</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">valid_indices</span><span class="p">]</span>
+            <span class="n">output_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># 使用进度条处理</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;处理 </span><span class="si">{</span><span class="n">file_basename</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">sheet</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">enable_progress_bar</span><span class="p">:</span>
+                <span class="n">iterator</span> <span class="o">=</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_rows_df</span><span class="p">)),</span> <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">iterator</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">valid_rows_df</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+                <span class="n">row_data</span> <span class="o">=</span> <span class="n">valid_rows_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">commands</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">commands</span><span class="p">:</span>
+                        <span class="n">output_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">commands</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;处理第 </span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2"> 行时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># 确保输出目录存在</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># 写入输出文件</span>
+            <span class="n">output_file_path</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">scenario_name</span>
+            <span class="n">write_output_file</span><span class="p">(</span><span class="n">output_file_path</span><span class="p">,</span> <span class="n">output_list</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;已生成: </span><span class="si">{</span><span class="n">output_file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;处理文件 </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2"> 时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ExcelParseError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;处理文件失败: </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+
+
+<div class="viewcode-block" id="write_output_file">
+<a class="viewcode-back" href="../generate_scenario.html#generate_scenario.write_output_file">[文档]</a>
+<span class="k">def</span> <span class="nf">write_output_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    写入输出文件</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        output_path: 输出文件路径</span>
+<span class="sd">        lines: 输出行列表</span>
+<span class="sd">        config: 应用配置</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="c1"># Ren&#39;Py 特定的缩进处理</span>
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;renpy&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;label &quot;</span><span class="p">):</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">indent</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">indent_size</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">indent</span> <span class="o">+</span> <span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># 其他引擎的默认处理</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../generate_scenario.html#generate_scenario.main">[文档]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;主函数&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># 加载配置</span>
+        <span class="n">config_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;config.yaml&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;从配置文件加载: </span><span class="si">{</span><span class="n">config_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;使用默认配置&quot;</span><span class="p">)</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 确保目录存在</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">ensure_dirs_exist</span><span class="p">()</span>
+
+        <span class="c1"># 确保输入路径存在</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;输入路径不存在: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 获取所有Excel文件</span>
+        <span class="n">excel_files</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;.xls&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">TEMP_FILE_PREFIX</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">excel_files</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;在 </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="si">}</span><span class="s2"> 中没有找到Excel文件&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;找到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">excel_files</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个Excel文件，开始处理...&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;使用引擎: </span><span class="si">{</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 处理每个Excel文件</span>
+        <span class="k">for</span> <span class="n">excel_file</span> <span class="ow">in</span> <span class="n">excel_files</span><span class="p">:</span>
+            <span class="n">process_excel_file</span><span class="p">(</span><span class="n">excel_file</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;所有文件处理完成&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;程序执行失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">raise</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

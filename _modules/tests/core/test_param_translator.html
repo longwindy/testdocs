@@ -1,0 +1,350 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.core.test_param_translator &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.core.test_param_translator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.core.test_param_translator 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 ParamTranslator 类</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">core.param_translator</span> <span class="kn">import</span> <span class="n">ParamTranslator</span>
+
+
+<div class="viewcode-block" id="TestParamTranslator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator">[文档]</a>
+<span class="k">class</span> <span class="nc">TestParamTranslator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 ParamTranslator 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestParamTranslator.mock_param_mappings_file">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.mock_param_mappings_file">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_param_mappings_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟的参数映射文件&quot;&quot;&quot;</span>
+        <span class="n">mappings_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+        <span class="n">mappings_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">PARAM_MAPPINGS = {</span>
+<span class="s2">    &quot;Music&quot;: {</span>
+<span class="s2">        &quot;音乐1&quot;: &quot;music1&quot;,</span>
+<span class="s2">        &quot;音乐2&quot;: &quot;music2&quot;,</span>
+<span class="s2">        &quot;背景音乐&quot;: &quot;bgm_main&quot;</span>
+<span class="s2">    },</span>
+<span class="s2">    &quot;Speaker&quot;: {</span>
+<span class="s2">        &quot;角色A&quot;: &quot;character_a&quot;,</span>
+<span class="s2">        &quot;角色B&quot;: &quot;character_b&quot;</span>
+<span class="s2">    },</span>
+<span class="s2">    &quot;Background&quot;: {</span>
+<span class="s2">        &quot;背景1&quot;: &quot;bg_1&quot;,</span>
+<span class="s2">        &quot;背景2&quot;: &quot;bg_2&quot;</span>
+<span class="s2">    },</span>
+<span class="s2">    &quot;Varient&quot;: {</span>
+<span class="s2">        &quot;差分1&quot;: &quot;variant_1&quot;,</span>
+<span class="s2">        &quot;差分2&quot;: &quot;variant_2&quot;</span>
+<span class="s2">    }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">mappings_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">mappings_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mappings_file</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.mock_varient_mappings_file">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.mock_varient_mappings_file">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_varient_mappings_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟的差分参数映射文件&quot;&quot;&quot;</span>
+        <span class="n">varient_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;varient_mappings.py&quot;</span>
+        <span class="n">varient_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">VARIENT_MAPPINGS = {</span>
+<span class="s2">    &quot;角色A&quot;: {</span>
+<span class="s2">        &quot;开心&quot;: &quot;happy&quot;,</span>
+<span class="s2">        &quot;难过&quot;: &quot;sad&quot;</span>
+<span class="s2">    },</span>
+<span class="s2">    &quot;角色B&quot;: {</span>
+<span class="s2">        &quot;生气&quot;: &quot;angry&quot;,</span>
+<span class="s2">        &quot;惊讶&quot;: &quot;surprised&quot;</span>
+<span class="s2">    }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">varient_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">varient_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">varient_file</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.translator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.translator">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">translator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_param_mappings_file</span><span class="p">,</span> <span class="n">mock_varient_mappings_file</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建 ParamTranslator 实例&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ParamTranslator</span><span class="p">(</span>
+            <span class="n">module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">mock_param_mappings_file</span><span class="p">),</span>
+            <span class="n">varient_module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">mock_varient_mappings_file</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_init_success">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_init_success">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_init_success</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试成功初始化&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">translator</span><span class="o">.</span><span class="n">mappings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">translator</span><span class="o">.</span><span class="n">varient_mappings</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_init_with_missing_files">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_init_with_missing_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_init_with_missing_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试文件不存在时的初始化&quot;&quot;&quot;</span>
+        <span class="n">translator</span> <span class="o">=</span> <span class="n">ParamTranslator</span><span class="p">(</span>
+            <span class="n">module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent.py&quot;</span><span class="p">),</span>
+            <span class="n">varient_module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent2.py&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">mappings</span> <span class="o">==</span> <span class="p">{}</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">varient_mappings</span> <span class="o">==</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_translate">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;param_type,param_value,expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="c1"># 正常翻译</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐1&quot;</span><span class="p">,</span> <span class="s2">&quot;music1&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐2&quot;</span><span class="p">,</span> <span class="s2">&quot;music2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Speaker&quot;</span><span class="p">,</span> <span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="s2">&quot;character_a&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">,</span> <span class="s2">&quot;背景1&quot;</span><span class="p">,</span> <span class="s2">&quot;bg_1&quot;</span><span class="p">),</span>
+        <span class="c1"># 参数不存在，返回原值</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的音乐&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的音乐&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Speaker&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的角色&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的角色&quot;</span><span class="p">),</span>
+        <span class="c1"># 参数类型不存在，返回原值</span>
+        <span class="p">(</span><span class="s2">&quot;NotExistType&quot;</span><span class="p">,</span> <span class="s2">&quot;任意值&quot;</span><span class="p">,</span> <span class="s2">&quot;任意值&quot;</span><span class="p">),</span>
+        <span class="c1"># 空字符串</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">param_value</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试参数翻译&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">param_type</span><span class="p">,</span> <span class="n">param_value</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_translate_varient">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_varient">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;param_value,role,expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="c1"># 不提供角色名，从基础映射中查找</span>
+        <span class="p">(</span><span class="s2">&quot;差分1&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;variant_1&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;差分2&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;variant_2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;不存在的差分&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;不存在的差分&quot;</span><span class="p">),</span>
+        <span class="c1"># 提供角色名，使用角色特定映射</span>
+        <span class="p">(</span><span class="s2">&quot;开心&quot;</span><span class="p">,</span> <span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="s2">&quot;happy&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;难过&quot;</span><span class="p">,</span> <span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="s2">&quot;sad&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;生气&quot;</span><span class="p">,</span> <span class="s2">&quot;角色B&quot;</span><span class="p">,</span> <span class="s2">&quot;angry&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;惊讶&quot;</span><span class="p">,</span> <span class="s2">&quot;角色B&quot;</span><span class="p">,</span> <span class="s2">&quot;surprised&quot;</span><span class="p">),</span>
+        <span class="c1"># 角色不存在，返回原值</span>
+        <span class="p">(</span><span class="s2">&quot;开心&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的角色&quot;</span><span class="p">,</span> <span class="s2">&quot;开心&quot;</span><span class="p">),</span>
+        <span class="c1"># 角色存在但参数不存在，返回原值</span>
+        <span class="p">(</span><span class="s2">&quot;不存在的表情&quot;</span><span class="p">,</span> <span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的表情&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_translate_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">,</span> <span class="n">param_value</span><span class="p">,</span> <span class="n">role</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试差分参数翻译&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate_varient</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="n">role</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_translate_batch">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_batch">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_translate_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试批量翻译&quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;音乐1&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐2&quot;</span><span class="p">,</span> <span class="s2">&quot;背景音乐&quot;</span><span class="p">]</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;music1&quot;</span><span class="p">,</span> <span class="s2">&quot;music2&quot;</span><span class="p">,</span> <span class="s2">&quot;bgm_main&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate_batch</span><span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_translate_batch_with_missing_params">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_translate_batch_with_missing_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_translate_batch_with_missing_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试批量翻译包含不存在的参数&quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;音乐1&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的音乐&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐2&quot;</span><span class="p">]</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;music1&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在的音乐&quot;</span><span class="p">,</span> <span class="s2">&quot;music2&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate_batch</span><span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_get_available_types">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_available_types">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_available_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取可用参数类型&quot;&quot;&quot;</span>
+        <span class="n">types</span> <span class="o">=</span> <span class="n">translator</span><span class="o">.</span><span class="n">get_available_types</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="s2">&quot;Music&quot;</span> <span class="ow">in</span> <span class="n">types</span>
+        <span class="k">assert</span> <span class="s2">&quot;Speaker&quot;</span> <span class="ow">in</span> <span class="n">types</span>
+        <span class="k">assert</span> <span class="s2">&quot;Background&quot;</span> <span class="ow">in</span> <span class="n">types</span>
+        <span class="k">assert</span> <span class="s2">&quot;Varient&quot;</span> <span class="ow">in</span> <span class="n">types</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">types</span><span class="p">)</span> <span class="o">==</span> <span class="mi">4</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_get_params_for_type">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_params_for_type">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;param_type,expected_result&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;音乐1&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐2&quot;</span><span class="p">,</span> <span class="s2">&quot;背景音乐&quot;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="s2">&quot;NotExist&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_get_params_for_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">expected_result</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取指定类型的所有原始参数&quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">translator</span><span class="o">.</span><span class="n">get_params_for_type</span><span class="p">(</span><span class="n">param_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">expected_result</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">expected_param</span> <span class="ow">in</span> <span class="n">expected_result</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">expected_param</span> <span class="ow">in</span> <span class="n">params</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">params</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_get_translations_for_type">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_get_translations_for_type">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;param_type,expected_result&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;music1&quot;</span><span class="p">,</span> <span class="s2">&quot;music2&quot;</span><span class="p">,</span> <span class="s2">&quot;bgm_main&quot;</span><span class="p">]),</span>
+        <span class="p">(</span><span class="s2">&quot;NotExist&quot;</span><span class="p">,</span> <span class="p">[]),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_get_translations_for_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">expected_result</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取指定类型的所有翻译后参数&quot;&quot;&quot;</span>
+        <span class="n">translations</span> <span class="o">=</span> <span class="n">translator</span><span class="o">.</span><span class="n">get_translations_for_type</span><span class="p">(</span><span class="n">param_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">expected_result</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">expected_translation</span> <span class="ow">in</span> <span class="n">expected_result</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">expected_translation</span> <span class="ow">in</span> <span class="n">translations</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">translations</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">expected_result</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">translations</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_has_mapping">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_has_mapping">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;param_type,param_value,expected&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="c1"># 存在的映射</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;音乐1&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;Speaker&quot;</span><span class="p">,</span> <span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="c1"># 不存在的映射</span>
+        <span class="p">(</span><span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;不存在&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;NotExist&quot;</span><span class="p">,</span> <span class="s2">&quot;任意值&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_has_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">translator</span><span class="p">,</span> <span class="n">param_type</span><span class="p">,</span> <span class="n">param_value</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试检查映射是否存在&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">has_mapping</span><span class="p">(</span><span class="n">param_type</span><span class="p">,</span> <span class="n">param_value</span><span class="p">)</span> <span class="ow">is</span> <span class="n">expected</span></div>
+
+
+<div class="viewcode-block" id="TestParamTranslator.test_special_characters_in_param">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_param_translator.TestParamTranslator.test_special_characters_in_param">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_special_characters_in_param</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试包含特殊字符的参数&quot;&quot;&quot;</span>
+        <span class="c1"># 创建包含特殊字符的映射</span>
+        <span class="n">mappings_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;special_mappings.py&quot;</span>
+        <span class="n">mappings_content</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">PARAM_MAPPINGS = {</span>
+<span class="s2">    &quot;Test&quot;: {</span>
+<span class="s2">        &quot;参数-1&quot;: &quot;param_1&quot;,</span>
+<span class="s2">        &quot;参数_2&quot;: &quot;param_2&quot;,</span>
+<span class="s2">        &quot;参数(3)&quot;: &quot;param_3&quot;</span>
+<span class="s2">    }</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+        <span class="n">mappings_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">mappings_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+        <span class="n">translator</span> <span class="o">=</span> <span class="n">ParamTranslator</span><span class="p">(</span>
+            <span class="n">module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">mappings_file</span><span class="p">),</span>
+            <span class="n">varient_module_file</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent.py&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="s2">&quot;参数-1&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;param_1&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="s2">&quot;参数_2&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;param_2&quot;</span>
+        <span class="k">assert</span> <span class="n">translator</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span> <span class="s2">&quot;参数(3)&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;param_3&quot;</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

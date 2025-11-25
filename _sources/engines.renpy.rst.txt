@@ -1,0 +1,18 @@
+engines.renpy package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   engines.renpy.sentence_generators
+
+Module contents
+---------------
+
+.. automodule:: engines.renpy
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,18 @@
+engines.naninovel package
+=========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   engines.naninovel.sentence_generators
+
+Module contents
+---------------
+
+.. automodule:: engines.naninovel
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core.sentence_generator_manager &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">core.sentence_generator_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>core.sentence_generator_manager 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">句子生成器管理器模块</span>
+<span class="sd">负责发现、加载和管理引擎特定的生成器</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">pkgutil</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">core.base_sentence_generator</span> <span class="kn">import</span> <span class="n">BaseSentenceGenerator</span>
+<span class="kn">from</span> <span class="nn">core.param_translator</span> <span class="kn">import</span> <span class="n">ParamTranslator</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">EngineConfig</span>
+<span class="kn">from</span> <span class="nn">core.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">core.exceptions</span> <span class="kn">import</span> <span class="n">GeneratorError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="SentenceGeneratorManager">
+<a class="viewcode-back" href="../../core.html#core.sentence_generator_manager.SentenceGeneratorManager">[文档]</a>
+<span class="k">class</span> <span class="nc">SentenceGeneratorManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;句子生成器管理器&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="n">engine_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">BaseSentenceGenerator</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_configs</span><span class="p">:</span> <span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="SentenceGeneratorManager.load">
+<a class="viewcode-back" href="../../core.html#core.sentence_generator_manager.SentenceGeneratorManager.load">[文档]</a>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;加载所有生成器类和参数配置&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loaded</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;开始加载 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">engine_type</span><span class="si">}</span><span class="s2"> 引擎的生成器&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_discover_generator_classes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collect_param_configs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loaded</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_discover_generator_classes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;发现指定引擎的所有生成器类&quot;&quot;&quot;</span>
+        <span class="n">generators_package</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;engines.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">engine_type</span><span class="si">}</span><span class="s2">.sentence_generators&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">package</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">generators_package</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">module_name</span><span class="p">,</span> <span class="n">is_pkg</span> <span class="ow">in</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">(</span><span class="n">package</span><span class="o">.</span><span class="n">__path__</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">is_pkg</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">module_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_generator&#39;</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">full_module_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">generators_package</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">full_module_name</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmembers</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_generator_class</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span>
+                                <span class="n">obj</span><span class="o">.</span><span class="vm">__module__</span> <span class="o">==</span> <span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;发现生成器: </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;导入模块 </span><span class="si">{</span><span class="n">module_name</span><span class="si">}</span><span class="s2"> 时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;导入生成器包 </span><span class="si">{</span><span class="n">generators_package</span><span class="si">}</span><span class="s2"> 时出错: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">GeneratorError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;无法加载引擎 </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">engine_type</span><span class="si">}</span><span class="s2"> 的生成器&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+    <span class="k">def</span> <span class="nf">_is_generator_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;检查是否为有效的生成器类&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="nb">issubclass</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">BaseSentenceGenerator</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="n">obj</span> <span class="o">!=</span> <span class="n">BaseSentenceGenerator</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">_collect_param_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;收集所有生成器的参数配置&quot;&quot;&quot;</span>
+        <span class="n">total_params</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">generator_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="p">:</span>
+            <span class="n">param_config</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">generator_class</span><span class="p">,</span> <span class="s1">&#39;param_config&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">param_config</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">param_configs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">param_config</span><span class="p">)</span>
+                <span class="n">total_params</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">param_config</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;从 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个生成器收集了 </span><span class="si">{</span><span class="n">total_params</span><span class="si">}</span><span class="s2"> 个参数配置&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SentenceGeneratorManager.create_generator_instances">
+<a class="viewcode-back" href="../../core.html#core.sentence_generator_manager.SentenceGeneratorManager.create_generator_instances">[文档]</a>
+    <span class="k">def</span> <span class="nf">create_generator_instances</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">translator</span><span class="p">:</span> <span class="n">ParamTranslator</span><span class="p">,</span>
+        <span class="n">engine_config</span><span class="p">:</span> <span class="n">EngineConfig</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">BaseSentenceGenerator</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建生成器实例&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="n">instances</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">generator_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">instance</span> <span class="o">=</span> <span class="n">generator_class</span><span class="p">(</span><span class="n">translator</span><span class="p">,</span> <span class="n">engine_config</span><span class="p">)</span>
+                <span class="n">instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;创建 </span><span class="si">{</span><span class="n">generator_class</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> 实例失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">instances</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">g</span><span class="p">:</span> <span class="n">g</span><span class="o">.</span><span class="n">priority</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;共创建 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">instances</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个生成器&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">generator</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">instances</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">. </span><span class="si">{</span><span class="n">generator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> (优先级: </span><span class="si">{</span><span class="n">generator</span><span class="o">.</span><span class="n">priority</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">instances</span></div>
+
+
+<div class="viewcode-block" id="SentenceGeneratorManager.get_all_param_names">
+<a class="viewcode-back" href="../../core.html#core.sentence_generator_manager.SentenceGeneratorManager.get_all_param_names">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_all_param_names</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有参数名称&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_configs</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span></div>
+
+
+<div class="viewcode-block" id="SentenceGeneratorManager.get_validate_params">
+<a class="viewcode-back" href="../../core.html#core.sentence_generator_manager.SentenceGeneratorManager.get_validate_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_validate_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        收集所有参数配置中的translate_type值和validate_type值</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, list[str]]: 去重后的数据验证参数列表词典</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">translate_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">validate_types</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">generator_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator_classes</span><span class="p">:</span>
+            <span class="n">param_config</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">generator_class</span><span class="p">,</span> <span class="s1">&#39;param_config&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            
+            <span class="k">if</span> <span class="n">param_config</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">param_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="s2">&quot;translate_type&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                            <span class="n">translate_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;translate_type&quot;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">translate_type</span><span class="p">:</span>
+                                <span class="n">translate_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">translate_type</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="s2">&quot;validate_type&quot;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+                            <span class="n">validate_type</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;validate_type&quot;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">validate_type</span><span class="p">:</span>
+                                <span class="n">validate_types</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">validate_type</span><span class="p">)</span>
+
+        <span class="c1"># 转换为排序后的列表</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;translate_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">translate_types</span><span class="p">))</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;validate_types&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">validate_types</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;收集到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">translate_types</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个翻译参数: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;translate_types&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;收集到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">validate_types</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个验证参数: </span><span class="si">{</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;validate_types&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

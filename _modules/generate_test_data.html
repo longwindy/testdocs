@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>generate_test_data &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaddf03"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">generate_test_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>generate_test_data 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">生成测试数据脚本</span>
+<span class="sd">复制 Ren&#39;py.xlsx 并填充 1000 行随机测试数据</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">load_workbook</span>
+<span class="kn">from</span> <span class="nn">openpyxl.worksheet.datavalidation</span> <span class="kn">import</span> <span class="n">DataValidation</span>
+
+<div class="viewcode-block" id="generate_test_data">
+<a class="viewcode-back" href="../generate_test_data.html#generate_test_data.generate_test_data">[文档]</a>
+<span class="k">def</span> <span class="nf">generate_test_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;生成测试数据&quot;&quot;&quot;</span>
+    <span class="c1"># 源文件和目标文件</span>
+    <span class="n">source_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;input/Ren&#39;py.xlsx&quot;</span><span class="p">)</span>
+    <span class="n">target_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;input/Ren&#39;py_2.xlsx&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 复制文件</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;复制文件: </span><span class="si">{</span><span class="n">source_file</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">target_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">source_file</span><span class="p">,</span> <span class="n">target_file</span><span class="p">)</span>
+
+    <span class="c1"># 打开目标文件</span>
+    <span class="n">wb</span> <span class="o">=</span> <span class="n">load_workbook</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>
+    <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+
+    <span class="c1"># 获取参数表工作表（用于获取数据验证列表）</span>
+    <span class="n">param_ws</span> <span class="o">=</span> <span class="n">wb</span><span class="p">[</span><span class="s2">&quot;参数表&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="s2">&quot;参数表&quot;</span> <span class="ow">in</span> <span class="n">wb</span><span class="o">.</span><span class="n">sheetnames</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="c1"># 读取参数表的列名和数据</span>
+    <span class="n">param_data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">param_ws</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">col_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">param_ws</span><span class="o">.</span><span class="n">max_column</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">param_ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">col_idx</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">param_ws</span><span class="o">.</span><span class="n">max_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">param_ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row_idx</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">col_idx</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+                    <span class="k">if</span> <span class="n">val</span><span class="p">:</span>
+                        <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+                <span class="n">param_data</span><span class="p">[</span><span class="n">header</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;从参数表读取到 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">param_data</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个参数类型&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 获取主工作表的表头</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">col_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_column</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">col_idx</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+            <span class="n">headers</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">col_idx</span><span class="p">,</span> <span class="n">header</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;主工作表有 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">headers</span><span class="p">)</span><span class="si">}</span><span class="s2"> 列&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 生成 1000 行随机数据</span>
+    <span class="n">start_row</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_row</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;从第 </span><span class="si">{</span><span class="n">start_row</span><span class="si">}</span><span class="s2"> 行开始生成 1000 行数据...&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">row_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_row</span><span class="p">,</span> <span class="n">start_row</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">col_idx</span><span class="p">,</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="c1"># 根据列名生成合适的随机数据</span>
+            <span class="k">if</span> <span class="n">header</span> <span class="o">==</span> <span class="s2">&quot;Index&quot;</span><span class="p">:</span>
+                <span class="c1"># Index 列递增</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">row_num</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="o">==</span> <span class="s2">&quot;Ignore&quot;</span><span class="p">:</span>
+                <span class="c1"># Ignore 列保持为空</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="ow">in</span> <span class="n">param_data</span> <span class="ow">and</span> <span class="n">param_data</span><span class="p">[</span><span class="n">header</span><span class="p">]:</span>
+                <span class="c1"># 从参数表中随机选择</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">param_data</span><span class="p">[</span><span class="n">header</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="o">==</span> <span class="s2">&quot;Speaker&quot;</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;角色A&quot;</span><span class="p">,</span> <span class="s2">&quot;角色B&quot;</span><span class="p">,</span> <span class="s2">&quot;角色C&quot;</span><span class="p">,</span> <span class="s2">&quot;旁白&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="o">==</span> <span class="s2">&quot;Text&quot;</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;这是第</span><span class="si">{</span><span class="n">row_num</span><span class="si">}</span><span class="s2">行的测试文本内容。&quot;</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Wait&quot;</span><span class="p">,</span> <span class="s2">&quot;Visible&quot;</span><span class="p">,</span> <span class="s2">&quot;CharAnimWait&quot;</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Volume&quot;</span><span class="p">,</span> <span class="s2">&quot;Scale&quot;</span><span class="p">,</span> <span class="s2">&quot;Time&quot;</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;0.5&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span> <span class="s2">&quot;1.5&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">header</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;Position&quot;</span><span class="p">]:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;0.3&quot;</span><span class="p">,</span> <span class="s2">&quot;0.5&quot;</span><span class="p">,</span> <span class="s2">&quot;0.7&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># 其他列随机留空或填充</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">0.3</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;test_</span><span class="si">{</span><span class="n">row_num</span><span class="si">}</span><span class="s2">&quot;</span>
+
+            <span class="n">ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">col_idx</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">row_num</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  已生成 </span><span class="si">{</span><span class="n">row_num</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start_row</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> 行...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 保存文件</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;保存文件: </span><span class="si">{</span><span class="n">target_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>
+    <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;完成！生成了 1000 行测试数据&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;文件总行数: </span><span class="si">{</span><span class="n">start_row</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2"> 行（含表头）&quot;</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">generate_test_data</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

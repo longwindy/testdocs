@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core.exceptions &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">core.exceptions</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>core.exceptions 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">自定义异常类模块</span>
+<span class="sd">定义项目中使用的所有异常类型</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="ScenarioToolError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.ScenarioToolError">[文档]</a>
+<span class="k">class</span> <span class="nc">ScenarioToolError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;基础异常类&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="ConfigError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.ConfigError">[文档]</a>
+<span class="k">class</span> <span class="nc">ConfigError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;配置相关错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="EngineError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.EngineError">[文档]</a>
+<span class="k">class</span> <span class="nc">EngineError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;引擎相关错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="GeneratorError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.GeneratorError">[文档]</a>
+<span class="k">class</span> <span class="nc">GeneratorError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;生成器错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="TranslationError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.TranslationError">[文档]</a>
+<span class="k">class</span> <span class="nc">TranslationError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;参数翻译错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="FileValidationError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.FileValidationError">[文档]</a>
+<span class="k">class</span> <span class="nc">FileValidationError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;文件验证错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="ExcelParseError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.ExcelParseError">[文档]</a>
+<span class="k">class</span> <span class="nc">ExcelParseError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Excel 解析错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="EngineNotRegisteredError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.EngineNotRegisteredError">[文档]</a>
+<span class="k">class</span> <span class="nc">EngineNotRegisteredError</span><span class="p">(</span><span class="n">EngineError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;引擎未注册错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="InvalidParameterError">
+<a class="viewcode-back" href="../../core.html#core.exceptions.InvalidParameterError">[文档]</a>
+<span class="k">class</span> <span class="nc">InvalidParameterError</span><span class="p">(</span><span class="n">ScenarioToolError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;无效参数错误&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

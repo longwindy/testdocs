@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.core.test_config_manager &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.core.test_config_manager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.core.test_config_manager 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 ConfigManager 模块</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PathConfig</span><span class="p">,</span>
+    <span class="n">ProcessingConfig</span><span class="p">,</span>
+    <span class="n">EngineConfig</span><span class="p">,</span>
+    <span class="n">RenpyConfig</span><span class="p">,</span>
+    <span class="n">NaninovelConfig</span><span class="p">,</span>
+    <span class="n">AppConfig</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TestPathConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestPathConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestPathConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 PathConfig 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestPathConfig.test_default_paths">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestPathConfig.test_default_paths">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_default_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认路径&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./input&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./output&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./param_config&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./logs&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestPathConfig.test_custom_paths">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestPathConfig.test_custom_paths">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_custom_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试自定义路径&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="p">(</span>
+            <span class="n">input_dir</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_input&quot;</span><span class="p">),</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_output&quot;</span><span class="p">),</span>
+            <span class="n">param_config_dir</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_param&quot;</span><span class="p">),</span>
+            <span class="n">log_dir</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_logs&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_input&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_output&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_param&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">log_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./custom_logs&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestPathConfig.test_post_init_converts_to_path">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestPathConfig.test_post_init_converts_to_path">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_post_init_converts_to_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试 __post_init__ 将字符串转换为 Path 对象&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="p">(</span>
+            <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;./string_input&quot;</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./string_output&quot;</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">Path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestPathConfig.test_ensure_dirs_exist">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestPathConfig.test_ensure_dirs_exist">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_ensure_dirs_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建目录&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="p">(</span>
+            <span class="n">input_dir</span><span class="o">=</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span>
+            <span class="n">output_dir</span><span class="o">=</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;output&quot;</span><span class="p">,</span>
+            <span class="n">param_config_dir</span><span class="o">=</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span><span class="p">,</span>
+            <span class="n">log_dir</span><span class="o">=</span><span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;logs&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 确保目录不存在</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">output_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 创建目录</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">ensure_dirs_exist</span><span class="p">()</span>
+
+        <span class="c1"># 验证目录已创建</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">output_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">log_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestProcessingConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestProcessingConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestProcessingConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 ProcessingConfig 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestProcessingConfig.test_default_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestProcessingConfig.test_default_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">ProcessingConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">ignore_mode</span> <span class="ow">is</span> <span class="kc">True</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">ignore_words</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="mi">100</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">enable_progress_bar</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestProcessingConfig.test_custom_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestProcessingConfig.test_custom_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_custom_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试自定义配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">ProcessingConfig</span><span class="p">(</span>
+            <span class="n">ignore_mode</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">ignore_words</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">],</span>
+            <span class="n">batch_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+            <span class="n">enable_progress_bar</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">ignore_mode</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">ignore_words</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;ignore&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="mi">50</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">enable_progress_bar</span> <span class="ow">is</span> <span class="kc">False</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEngineConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestEngineConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 EngineConfig 基类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineConfig.test_get_output_filename">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestEngineConfig.test_get_output_filename">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_output_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成输出文件名&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">EngineConfig</span><span class="p">(</span>
+            <span class="n">engine_type</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.txt&quot;</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">get_output_filename</span><span class="p">(</span><span class="s2">&quot;chapter1&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;chapter1.txt&quot;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">get_output_filename</span><span class="p">(</span><span class="s2">&quot;scene_01&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;scene_01.txt&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestRenpyConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestRenpyConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestRenpyConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 RenpyConfig 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestRenpyConfig.test_default_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestRenpyConfig.test_default_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">RenpyConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.rpy&quot;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">indent_size</span> <span class="o">==</span> <span class="mi">4</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">label_indent</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">default_transition</span> <span class="o">==</span> <span class="s2">&quot;dissolve&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestRenpyConfig.test_get_output_filename">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestRenpyConfig.test_get_output_filename">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_output_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成输出文件名&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">RenpyConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">get_output_filename</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;script.rpy&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestNaninovelConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestNaninovelConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestNaninovelConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 NaninovelConfig 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestNaninovelConfig.test_default_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestNaninovelConfig.test_default_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">NaninovelConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;naninovel&quot;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.nani&quot;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">command_prefix</span> <span class="o">==</span> <span class="s2">&quot;@&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestNaninovelConfig.test_get_output_filename">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestNaninovelConfig.test_get_output_filename">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_output_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成输出文件名&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">NaninovelConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">get_output_filename</span><span class="p">(</span><span class="s2">&quot;chapter1&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;chapter1.nani&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestAppConfig">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig">[文档]</a>
+<span class="k">class</span> <span class="nc">TestAppConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 AppConfig 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestAppConfig.test_default_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_default_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_default_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="p">,</span> <span class="n">PathConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="p">,</span> <span class="n">ProcessingConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">NaninovelConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_create_default_naninovel">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_naninovel">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_create_default_naninovel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建默认 Naninovel 配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">NaninovelConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;naninovel&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_create_default_renpy">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_renpy">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_create_default_renpy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建默认 Ren&#39;Py 配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;renpy&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_create_default_invalid_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_create_default_invalid_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_create_default_invalid_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建不支持的引擎配置&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;不支持的引擎类型&quot;</span><span class="p">):</span>
+            <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;invalid_engine&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_minimal">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_minimal">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_minimal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从最小字典创建配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="p">,</span> <span class="n">PathConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="p">,</span> <span class="n">ProcessingConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">NaninovelConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_with_paths">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_paths">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_with_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从包含路径的字典创建配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;paths&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;input_dir&#39;</span><span class="p">:</span> <span class="s1">&#39;./test_input&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;output_dir&#39;</span><span class="p">:</span> <span class="s1">&#39;./test_output&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./test_input&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./test_output&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_with_processing">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_processing">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_with_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从包含处理配置的字典创建配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;processing&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;ignore_mode&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="mi">50</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">ignore_mode</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="mi">50</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_with_renpy_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_renpy_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_with_renpy_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从字典创建 Ren&#39;Py 引擎配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;renpy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;indent_size&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s1">&#39;default_transition&#39;</span><span class="p">:</span> <span class="s1">&#39;fade&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s1">&#39;renpy&#39;</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">indent_size</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">default_transition</span> <span class="o">==</span> <span class="s1">&#39;fade&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_with_naninovel_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_naninovel_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_with_naninovel_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从字典创建 Naninovel 引擎配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;naninovel&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;command_prefix&#39;</span><span class="p">:</span> <span class="s1">&#39;#&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">NaninovelConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">command_prefix</span> <span class="o">==</span> <span class="s1">&#39;#&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_with_engine_string">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_with_engine_string">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_with_engine_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从字符串引擎类型创建配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="s1">&#39;renpy&#39;</span>
+        <span class="p">}</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s1">&#39;renpy&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_dict_invalid_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_dict_invalid_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_dict_invalid_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从字典创建不支持的引擎配置&quot;&quot;&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;invalid&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;不支持的引擎类型&quot;</span><span class="p">):</span>
+            <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_file_json">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_json">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_file_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从 JSON 文件加载配置&quot;&quot;&quot;</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;config.json&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;paths&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;input_dir&#39;</span><span class="p">:</span> <span class="s1">&#39;./json_input&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;renpy&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./json_input&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_file_yaml">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_yaml">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_file_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从 YAML 文件加载配置&quot;&quot;&quot;</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;config.yaml&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;paths&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;input_dir&#39;</span><span class="p">:</span> <span class="s1">&#39;./yaml_input&#39;</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;naninovel&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./yaml_input&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">NaninovelConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_file_yml_extension">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_yml_extension">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_file_yml_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从 .yml 文件加载配置&quot;&quot;&quot;</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;config.yml&quot;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;engine&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;engine_type&#39;</span><span class="p">:</span> <span class="s1">&#39;renpy&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_from_file_invalid_format">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_from_file_invalid_format">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_from_file_invalid_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试从不支持的文件格式加载配置&quot;&quot;&quot;</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;config.txt&quot;</span>
+        <span class="n">config_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;invalid config&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;不支持的配置文件格式&quot;</span><span class="p">):</span>
+            <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_to_file_json">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_json">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_to_file_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试保存配置到 JSON 文件&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./test_input&quot;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">50</span>
+
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;output.json&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证文件已创建</span>
+        <span class="k">assert</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 验证文件内容</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;paths&#39;</span><span class="p">][</span><span class="s1">&#39;input_dir&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./test_input&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;processing&#39;</span><span class="p">][</span><span class="s1">&#39;batch_size&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">50</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;engine_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;renpy&#39;</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;label_indent&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;default_transition&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;dissolve&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_to_file_yaml">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_yaml">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_to_file_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试保存配置到 YAML 文件&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./test_output&quot;</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">ignore_mode</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;output.yaml&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证文件已创建</span>
+        <span class="k">assert</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 验证文件内容</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">Path</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;paths&#39;</span><span class="p">][</span><span class="s1">&#39;output_dir&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;./test_output&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;processing&#39;</span><span class="p">][</span><span class="s1">&#39;ignore_mode&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;engine_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;naninovel&#39;</span>
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;command_prefix&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;@&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_to_file_yml_extension">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_to_file_yml_extension">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_to_file_yml_extension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试保存配置到 .yml 文件&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;output.yml&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">config_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;engine&#39;</span><span class="p">][</span><span class="s1">&#39;engine_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;renpy&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_roundtrip_json">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_roundtrip_json">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_roundtrip_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试 JSON 配置的往返转换&quot;&quot;&quot;</span>
+        <span class="c1"># 创建配置</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./roundtrip_input&quot;</span><span class="p">)</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="mi">75</span>
+
+        <span class="c1"># 保存到文件</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;roundtrip.json&quot;</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 从文件加载</span>
+        <span class="n">loaded</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证配置一致</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">batch_size</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span></div>
+
+
+<div class="viewcode-block" id="TestAppConfig.test_roundtrip_yaml">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_config_manager.TestAppConfig.test_roundtrip_yaml">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_roundtrip_yaml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试 YAML 配置的往返转换&quot;&quot;&quot;</span>
+        <span class="c1"># 创建配置</span>
+        <span class="n">original</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">create_default</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;./roundtrip_output&quot;</span><span class="p">)</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">enable_progress_bar</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># 保存到文件</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;roundtrip.yaml&quot;</span>
+        <span class="n">original</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 从文件加载</span>
+        <span class="n">loaded</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证配置一致</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">enable_progress_bar</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">processing</span><span class="o">.</span><span class="n">enable_progress_bar</span>
+        <span class="k">assert</span> <span class="n">loaded</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="n">original</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+engines.naninovel.sentence\_generators package
+==============================================
+
+Submodules
+----------
+
+engines.naninovel.sentence\_generators.audio\_generator module
+--------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.audio_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.background\_generator module
+-------------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.background_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.camera\_generator module
+---------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.camera_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.character\_generator module
+------------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.character_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.effect\_generator module
+---------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.effect_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.movie\_generator module
+--------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.movie_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.note\_generator module
+-------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.note_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.pause\_wait\_generator module
+--------------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.pause_wait_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.text\_generator module
+-------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.text_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.transition\_generator module
+-------------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.transition_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.naninovel.sentence\_generators.voice\_generator module
+--------------------------------------------------------------
+
+.. automodule:: engines.naninovel.sentence_generators.voice_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: engines.naninovel.sentence_generators
+   :members:
+   :show-inheritance:
+   :undoc-members:

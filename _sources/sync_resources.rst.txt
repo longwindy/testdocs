@@ -1,0 +1,7 @@
+sync\_resources module
+======================
+
+.. automodule:: sync_resources
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,109 @@
+engines.renpy.sentence\_generators package
+==========================================
+
+Submodules
+----------
+
+engines.renpy.sentence\_generators.atl\_generator module
+--------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.atl_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.audio\_generator module
+----------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.audio_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.background\_generator module
+---------------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.background_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.camera\_generator module
+-----------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.camera_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.character\_atl\_generator module
+-------------------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.character_atl_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.character\_generator module
+--------------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.character_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.clear\_layer\_generator module
+-----------------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.clear_layer_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.note\_generator module
+---------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.note_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.pause\_generator module
+----------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.pause_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.text\_generator module
+---------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.text_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.transition\_generator module
+---------------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.transition_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+engines.renpy.sentence\_generators.voice\_generator module
+----------------------------------------------------------
+
+.. automodule:: engines.renpy.sentence_generators.voice_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: engines.renpy.sentence_generators
+   :members:
+   :show-inheritance:
+   :undoc-members:

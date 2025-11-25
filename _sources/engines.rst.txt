@@ -1,0 +1,19 @@
+engines package
+===============
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   engines.naninovel
+   engines.renpy
+
+Module contents
+---------------
+
+.. automodule:: engines
+   :members:
+   :show-inheritance:
+   :undoc-members:

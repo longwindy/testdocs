@@ -1,0 +1,853 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.core.test_engine_processor &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.core.test_engine_processor</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.core.test_engine_processor 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 engine_processor 模块</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">Mock</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">MagicMock</span>
+<span class="kn">from</span> <span class="nn">core.engine_processor</span> <span class="kn">import</span> <span class="n">EngineProcessor</span>
+<span class="kn">from</span> <span class="nn">core.base_sentence_generator</span> <span class="kn">import</span> <span class="n">BaseSentenceGenerator</span>
+<span class="kn">from</span> <span class="nn">core.param_translator</span> <span class="kn">import</span> <span class="n">ParamTranslator</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">EngineConfig</span>
+<span class="kn">from</span> <span class="nn">core.sentence_generator_manager</span> <span class="kn">import</span> <span class="n">SentenceGeneratorManager</span>
+
+
+<span class="c1"># 创建测试用的生成器类</span>
+<div class="viewcode-block" id="MockMusicGenerator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockMusicGenerator">[文档]</a>
+<span class="k">class</span> <span class="nc">MockMusicGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试音乐生成器&quot;&quot;&quot;</span>
+
+    <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;play music </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;Sound&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;play sound </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;music&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">10</span>
+
+<div class="viewcode-block" id="MockMusicGenerator.process">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockMusicGenerator.process">[文档]</a>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;Music&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;play music </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Sound&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;play sound </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Sound&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">commands</span> <span class="k">if</span> <span class="n">commands</span> <span class="k">else</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MockSceneGenerator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockSceneGenerator">[文档]</a>
+<span class="k">class</span> <span class="nc">MockSceneGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试场景生成器&quot;&quot;&quot;</span>
+
+    <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;scene </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;Character&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;show </span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;scene&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">5</span>
+
+<div class="viewcode-block" id="MockSceneGenerator.process">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockSceneGenerator.process">[文档]</a>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">commands</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;Background&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scene </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;Character&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="n">commands</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;show </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Character&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">commands</span> <span class="k">if</span> <span class="n">commands</span> <span class="k">else</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="MockDialogueGenerator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator">[文档]</a>
+<span class="k">class</span> <span class="nc">MockDialogueGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试对话生成器&quot;&quot;&quot;</span>
+
+    <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Speaker&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">},</span>
+        <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="si">{value}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;dialogue&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">20</span>
+
+<div class="viewcode-block" id="MockDialogueGenerator.process">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.MockDialogueGenerator.process">[文档]</a>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s2">&quot;Speaker&quot;</span> <span class="ow">in</span> <span class="n">data</span> <span class="ow">and</span> <span class="s2">&quot;Text&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Speaker&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Text&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BrokenGenerator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.BrokenGenerator">[文档]</a>
+<span class="k">class</span> <span class="nc">BrokenGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;会抛出异常的生成器&quot;&quot;&quot;</span>
+
+    <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;Broken&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{value}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;broken&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">priority</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">30</span>
+
+<div class="viewcode-block" id="BrokenGenerator.process">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.BrokenGenerator.process">[文档]</a>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Intentional error for testing&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEngineProcessor">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineProcessor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 EngineProcessor 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineProcessor.mock_translator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_translator">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_translator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟翻译器&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">ParamTranslator</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.mock_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">=</span> <span class="s2">&quot;.test&quot;</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.mock_generator_manager">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.mock_generator_manager">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_generator_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟生成器管理器&quot;&quot;&quot;</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">manager</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.processor">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.processor">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">processor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建处理器实例&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">processor</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.test_init">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_init">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试初始化&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;test_engine&quot;</span>
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">translator</span> <span class="o">==</span> <span class="n">mock_translator</span>
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">engine_config</span> <span class="o">==</span> <span class="n">mock_config</span>
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">==</span> <span class="p">[]</span>
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span> <span class="o">==</span> <span class="p">{}</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.test_setup">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_setup">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试设置处理器&quot;&quot;&quot;</span>
+        <span class="c1"># 创建模拟生成器实例</span>
+        <span class="n">mock_gen1</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+        <span class="n">mock_gen2</span> <span class="o">=</span> <span class="n">MockSceneGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+        <span class="c1"># 设置 generator_manager 的返回值</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">generator_manager</span><span class="o">.</span><span class="n">create_generator_instances</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span>
+            <span class="n">return_value</span><span class="o">=</span><span class="p">[</span><span class="n">mock_gen1</span><span class="p">,</span> <span class="n">mock_gen2</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="n">processor</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+        <span class="c1"># 验证生成器已创建</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">generators</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">mock_gen1</span>
+        <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">generators</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">mock_gen2</span>
+
+        <span class="c1"># 验证参数映射已构建</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">mock_gen1</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span>
+        <span class="k">assert</span> <span class="n">mock_gen2</span> <span class="ow">in</span> <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.test_build_generator_param_map">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_build_generator_param_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试构建生成器参数映射&quot;&quot;&quot;</span>
+        <span class="c1"># 创建生成器</span>
+        <span class="n">gen1</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+        <span class="n">gen2</span> <span class="o">=</span> <span class="n">MockSceneGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+        <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen1</span><span class="p">,</span> <span class="n">gen2</span><span class="p">]</span>
+        <span class="n">param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+        <span class="c1"># 验证映射</span>
+        <span class="k">assert</span> <span class="n">gen1</span> <span class="ow">in</span> <span class="n">param_map</span>
+        <span class="k">assert</span> <span class="n">gen2</span> <span class="ow">in</span> <span class="n">param_map</span>
+        <span class="k">assert</span> <span class="s2">&quot;Music&quot;</span> <span class="ow">in</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s2">&quot;Sound&quot;</span> <span class="ow">in</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen1</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s2">&quot;Background&quot;</span> <span class="ow">in</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen2</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s2">&quot;Character&quot;</span> <span class="ow">in</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen2</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.test_build_generator_param_map_no_param_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map_no_param_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_build_generator_param_map_no_param_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试构建参数映射（生成器没有 param_config）&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个没有 param_config 的生成器</span>
+        <span class="k">class</span> <span class="nc">NoConfigGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+            <span class="nd">@property</span>
+            <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s2">&quot;no_config&quot;</span>
+
+            <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">NoConfigGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen</span><span class="p">]</span>
+
+        <span class="n">param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+        <span class="c1"># 应该有映射，但参数列表为空</span>
+        <span class="k">assert</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">param_map</span>
+        <span class="k">assert</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessor.test_build_generator_param_map_none_param_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessor.test_build_generator_param_map_none_param_config">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_build_generator_param_map_none_param_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试构建参数映射（param_config 为 None）&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个 param_config 为 None 的生成器</span>
+        <span class="k">class</span> <span class="nc">NoneConfigGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+            <span class="n">param_config</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="nd">@property</span>
+            <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s2">&quot;none_config&quot;</span>
+
+            <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">gen</span> <span class="o">=</span> <span class="n">NoneConfigGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+        <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen</span><span class="p">]</span>
+
+        <span class="n">param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+        <span class="c1"># 应该有映射，但参数列表为空</span>
+        <span class="k">assert</span> <span class="n">gen</span> <span class="ow">in</span> <span class="n">param_map</span>
+        <span class="k">assert</span> <span class="n">param_map</span><span class="p">[</span><span class="n">gen</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestProcessRow">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow">[文档]</a>
+<span class="k">class</span> <span class="nc">TestProcessRow</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 process_row 方法&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestProcessRow.mock_translator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.mock_translator">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_translator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟翻译器&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">ParamTranslator</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.mock_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.processor_with_generators">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.processor_with_generators">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">processor_with_generators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建带有生成器的处理器&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="c1"># 手动设置生成器</span>
+            <span class="n">gen1</span> <span class="o">=</span> <span class="n">MockSceneGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">gen2</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">gen3</span> <span class="o">=</span> <span class="n">MockDialogueGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen1</span><span class="p">,</span> <span class="n">gen2</span><span class="p">,</span> <span class="n">gen3</span><span class="p">]</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">processor</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_all_params">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_all_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理包含所有参数的行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+            <span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="s2">&quot;bg_room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Character&quot;</span><span class="p">:</span> <span class="s2">&quot;alice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm_main&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sound&quot;</span><span class="p">:</span> <span class="s2">&quot;sfx_door&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="s2">&quot;Hello!&quot;</span>
+        <span class="p">})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="c1"># 验证所有生成器都生成了命令</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="s2">&quot;scene bg_room&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;show alice&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;play music bgm_main&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;play sound sfx_door&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;Alice </span><span class="se">\&quot;</span><span class="s2">Hello!</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_partial_params">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_partial_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_partial_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理部分参数的行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+            <span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="s2">&quot;bg_room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm_main&quot;</span>
+        <span class="p">})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="c1"># 只有相关生成器生成命令</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="s2">&quot;scene bg_room&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;play music bgm_main&quot;</span> <span class="ow">in</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_empty_values">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_empty_values">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_empty_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理包含空值的行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+            <span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="s2">&quot;bg_room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Character&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>  <span class="c1"># 空字符串</span>
+            <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># None</span>
+            <span class="s2">&quot;Speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># 空字符串</span>
+        <span class="p">})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="c1"># 只有非空值生成命令</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="s2">&quot;scene bg_room&quot;</span> <span class="ow">in</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_nan_values">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_nan_values">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_nan_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理包含 NaN 值的行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+            <span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="s2">&quot;bg_room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Character&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span>  <span class="c1"># pandas NA</span>
+            <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;nan&#39;</span><span class="p">),</span>  <span class="c1"># NaN</span>
+            <span class="s2">&quot;Sound&quot;</span><span class="p">:</span> <span class="s2">&quot;sfx_door&quot;</span>
+        <span class="p">})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="c1"># NaN 值应该被过滤</span>
+        <span class="k">assert</span> <span class="s2">&quot;scene bg_room&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="s2">&quot;play sound sfx_door&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_no_matching_params">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_no_matching_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_no_matching_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理没有匹配参数的行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+            <span class="s2">&quot;UnknownParam1&quot;</span><span class="p">:</span> <span class="s2">&quot;value1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;UnknownParam2&quot;</span><span class="p">:</span> <span class="s2">&quot;value2&quot;</span>
+        <span class="p">})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="c1"># 没有生成器能处理这些参数</span>
+        <span class="k">assert</span> <span class="n">results</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_with_generator_error">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_with_generator_error">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_with_generator_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成器抛出异常时的处理&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="c1"># 添加一个正常生成器和一个会出错的生成器</span>
+            <span class="n">gen1</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">gen2</span> <span class="o">=</span> <span class="n">BrokenGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen1</span><span class="p">,</span> <span class="n">gen2</span><span class="p">]</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+            <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span>
+                <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm_main&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Broken&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span>
+            <span class="p">})</span>
+
+            <span class="c1"># 应该捕获异常并继续处理</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+            <span class="c1"># 正常生成器应该生成命令</span>
+            <span class="k">assert</span> <span class="s2">&quot;play music bgm_main&quot;</span> <span class="ow">in</span> <span class="n">results</span>
+            <span class="c1"># 出错的生成器不应该影响结果</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_empty_row">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_empty_row">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_process_row_empty_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理空行&quot;&quot;&quot;</span>
+        <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({})</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">results</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestProcessRow.test_process_row_generator_returns_empty">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestProcessRow.test_process_row_generator_returns_empty">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;return_value,category_name&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">),</span>
+        <span class="p">([],</span> <span class="s2">&quot;empty&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_process_row_generator_returns_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">,</span> <span class="n">return_value</span><span class="p">,</span> <span class="n">category_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成器返回 None 或空列表的情况&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="c1"># 创建一个返回指定值的生成器</span>
+            <span class="k">class</span> <span class="nc">TestGenerator</span><span class="p">(</span><span class="n">BaseSentenceGenerator</span><span class="p">):</span>
+                <span class="n">param_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Test&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+
+                <span class="nd">@property</span>
+                <span class="k">def</span> <span class="nf">category</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">category_name</span>
+
+                <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">return_value</span>
+
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">TestGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen</span><span class="p">]</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+            <span class="n">row_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Test&quot;</span><span class="p">:</span> <span class="s2">&quot;value&quot;</span><span class="p">})</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row_data</span><span class="p">)</span>
+
+            <span class="c1"># 返回 None 或空列表的生成器不应该添加到结果中</span>
+            <span class="k">assert</span> <span class="n">results</span> <span class="o">==</span> <span class="p">[]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestPipelineInfo">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo">[文档]</a>
+<span class="k">class</span> <span class="nc">TestPipelineInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试管道信息相关方法&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestPipelineInfo.mock_translator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.mock_translator">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_translator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟翻译器&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">ParamTranslator</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.mock_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.processor_with_generators">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.processor_with_generators">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">processor_with_generators</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建带有生成器的处理器&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="c1"># 按优先级顺序添加生成器</span>
+            <span class="n">gen1</span> <span class="o">=</span> <span class="n">MockSceneGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>  <span class="c1"># priority=5</span>
+            <span class="n">gen2</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>  <span class="c1"># priority=10</span>
+            <span class="n">gen3</span> <span class="o">=</span> <span class="n">MockDialogueGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>  <span class="c1"># priority=20</span>
+
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen1</span><span class="p">,</span> <span class="n">gen2</span><span class="p">,</span> <span class="n">gen3</span><span class="p">]</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generator_param_map</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">_build_generator_param_map</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="n">processor</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.test_get_pipeline_info">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_pipeline_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取管道信息&quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">get_pipeline_info</span><span class="p">()</span>
+
+        <span class="c1"># 验证基本信息</span>
+        <span class="k">assert</span> <span class="s2">&quot;total_stages&quot;</span> <span class="ow">in</span> <span class="n">info</span>
+        <span class="k">assert</span> <span class="s2">&quot;pipeline&quot;</span> <span class="ow">in</span> <span class="n">info</span>
+        <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;total_stages&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+
+        <span class="c1"># 验证管道详情</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">pipeline</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+        <span class="c1"># 验证第一个阶段</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;stage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MockSceneGenerator&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;scene&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">5</span>
+
+        <span class="c1"># 验证第二个阶段</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;stage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MockMusicGenerator&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;music&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">10</span>
+
+        <span class="c1"># 验证第三个阶段</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;stage&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MockDialogueGenerator&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;dialogue&quot;</span>
+        <span class="k">assert</span> <span class="n">pipeline</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;priority&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">20</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.test_get_pipeline_info_empty">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info_empty">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_pipeline_info_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取空管道信息&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">info</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get_pipeline_info</span><span class="p">()</span>
+
+            <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;total_stages&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.test_get_pipeline_info_with_category">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_pipeline_info_with_category">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_pipeline_info_with_category</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取管道信息（验证 category 正确获取）&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="c1"># 创建一个有 category 的生成器</span>
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">generators</span> <span class="o">=</span> <span class="p">[</span><span class="n">gen</span><span class="p">]</span>
+
+            <span class="n">info</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get_pipeline_info</span><span class="p">()</span>
+
+            <span class="c1"># 验证 category 被正确获取</span>
+            <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;music&quot;</span>
+            <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;pipeline&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;MockMusicGenerator&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestPipelineInfo.test_get_generator_manager">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestPipelineInfo.test_get_generator_manager">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_generator_manager</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">processor_with_generators</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取生成器管理器&quot;&quot;&quot;</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">processor_with_generators</span><span class="o">.</span><span class="n">get_generator_manager</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">manager</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">manager</span><span class="p">,</span> <span class="p">(</span><span class="n">SentenceGeneratorManager</span><span class="p">,</span> <span class="n">Mock</span><span class="p">))</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEngineProcessorIntegration">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineProcessorIntegration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;集成测试：测试完整的工作流程&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineProcessorIntegration.mock_translator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.mock_translator">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_translator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟翻译器&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">ParamTranslator</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessorIntegration.mock_config">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessorIntegration.test_full_workflow">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.test_full_workflow">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_full_workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试完整工作流程&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+            <span class="c1"># 创建生成器实例</span>
+            <span class="n">gen1</span> <span class="o">=</span> <span class="n">MockSceneGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">gen2</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">gen3</span> <span class="o">=</span> <span class="n">MockDialogueGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">create_generator_instances</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span>
+                <span class="n">return_value</span><span class="o">=</span><span class="p">[</span><span class="n">gen1</span><span class="p">,</span> <span class="n">gen2</span><span class="p">,</span> <span class="n">gen3</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="c1"># 1. 初始化处理器</span>
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">processor</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;test_engine&quot;</span>
+
+            <span class="c1"># 2. 设置处理器</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">processor</span><span class="o">.</span><span class="n">generators</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+            <span class="c1"># 3. 获取管道信息</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">get_pipeline_info</span><span class="p">()</span>
+            <span class="k">assert</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;total_stages&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+
+            <span class="c1"># 4. 处理多行数据</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Background&quot;</span><span class="p">:</span> <span class="s2">&quot;bg1&quot;</span><span class="p">,</span> <span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm1&quot;</span><span class="p">}),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Character&quot;</span><span class="p">:</span> <span class="s2">&quot;alice&quot;</span><span class="p">,</span> <span class="s2">&quot;Speaker&quot;</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="s2">&quot;Hi&quot;</span><span class="p">}),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Sound&quot;</span><span class="p">:</span> <span class="s2">&quot;sfx1&quot;</span><span class="p">})</span>
+            <span class="p">]</span>
+
+            <span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="n">processor</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                <span class="n">all_results</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+            <span class="c1"># 验证所有命令都生成了</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;scene bg1&quot;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">all_results</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;play music bgm1&quot;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">all_results</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;show alice&quot;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">all_results</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;Alice </span><span class="se">\&quot;</span><span class="s2">Hi</span><span class="se">\&quot;</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">all_results</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="nb">any</span><span class="p">(</span><span class="s2">&quot;play sound sfx1&quot;</span> <span class="ow">in</span> <span class="n">cmd</span> <span class="k">for</span> <span class="n">cmd</span> <span class="ow">in</span> <span class="n">all_results</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineProcessorIntegration.test_multiple_rows_processing">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_processor.TestEngineProcessorIntegration.test_multiple_rows_processing">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_multiple_rows_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理多行数据&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">patch</span><span class="p">(</span><span class="s1">&#39;core.engine_processor.SentenceGeneratorManager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">MockManager</span><span class="p">:</span>
+            <span class="n">mock_manager</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">SentenceGeneratorManager</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">load</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+            <span class="n">gen</span> <span class="o">=</span> <span class="n">MockMusicGenerator</span><span class="p">(</span><span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">mock_manager</span><span class="o">.</span><span class="n">create_generator_instances</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">return_value</span><span class="o">=</span><span class="p">[</span><span class="n">gen</span><span class="p">])</span>
+            <span class="n">MockManager</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">mock_manager</span>
+
+            <span class="n">processor</span> <span class="o">=</span> <span class="n">EngineProcessor</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span> <span class="n">mock_translator</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">)</span>
+            <span class="n">processor</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+
+            <span class="c1"># 处理多行</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm1&quot;</span><span class="p">}),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Music&quot;</span><span class="p">:</span> <span class="s2">&quot;bgm2&quot;</span><span class="p">}),</span>
+                <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s2">&quot;Sound&quot;</span><span class="p">:</span> <span class="s2">&quot;sfx1&quot;</span><span class="p">}),</span>
+            <span class="p">]</span>
+
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">processor</span><span class="o">.</span><span class="n">process_row</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">]</span>
+
+            <span class="c1"># 验证每行都被正确处理</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+            <span class="k">assert</span> <span class="s2">&quot;play music bgm1&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="s2">&quot;play music bgm2&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">assert</span> <span class="s2">&quot;play sound sfx1&quot;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core.engine_registry &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">core.engine_registry</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>core.engine_registry 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">引擎注册表模块</span>
+<span class="sd">实现引擎的动态注册和管理</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">EngineConfig</span>
+<span class="kn">from</span> <span class="nn">core.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">core.exceptions</span> <span class="kn">import</span> <span class="n">EngineNotRegisteredError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="EngineMetadata">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineMetadata">[文档]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EngineMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;引擎元数据&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">file_extension</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">config_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">EngineConfig</span><span class="p">]</span>
+    <span class="n">processor_factory</span><span class="p">:</span> <span class="n">Callable</span>
+    <span class="n">validator_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="EngineRegistry">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry">[文档]</a>
+<span class="k">class</span> <span class="nc">EngineRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;引擎注册表（单例模式）&quot;&quot;&quot;</span>
+
+    <span class="n">_instance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s1">&#39;EngineRegistry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_engines</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">EngineMetadata</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+
+<div class="viewcode-block" id="EngineRegistry.register">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry.register">[文档]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">EngineMetadata</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        注册引擎</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            metadata: 引擎元数据</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;引擎 &#39;</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; 已存在，将被覆盖&quot;</span><span class="p">)</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;注册引擎: </span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">display_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">metadata</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EngineRegistry.get">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry.get">[文档]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">engine_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EngineMetadata</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        获取引擎元数据</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_name: 引擎名称</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            EngineMetadata: 引擎元数据</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            EngineNotRegisteredError: 引擎未注册</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">engine_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">EngineNotRegisteredError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;引擎 &#39;</span><span class="si">{</span><span class="n">engine_name</span><span class="si">}</span><span class="s2">&#39; 未注册&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="p">[</span><span class="n">engine_name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="EngineRegistry.list_engines">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry.list_engines">[文档]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">list_engines</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">EngineMetadata</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        列出所有已注册引擎</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, EngineMetadata]: 引擎字典</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="EngineRegistry.is_registered">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry.is_registered">[文档]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">is_registered</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">engine_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        检查引擎是否已注册</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            engine_name: 引擎名称</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: 是否已注册</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">engine_name</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span></div>
+
+
+<div class="viewcode-block" id="EngineRegistry.reset">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.EngineRegistry.reset">[文档]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;重置注册表（主要用于测试）&quot;&quot;&quot;</span>
+        <span class="n">instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">instance</span><span class="o">.</span><span class="n">_engines</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;引擎注册表已重置&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="register_engine">
+<a class="viewcode-back" href="../../core.html#core.engine_registry.register_engine">[文档]</a>
+<span class="k">def</span> <span class="nf">register_engine</span><span class="p">(</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">file_extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">config_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">EngineConfig</span><span class="p">],</span>
+    <span class="n">validator_factory</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    引擎注册装饰器</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: 引擎名称</span>
+<span class="sd">        display_name: 显示名称</span>
+<span class="sd">        file_extension: 文件扩展名</span>
+<span class="sd">        config_class: 配置类</span>
+<span class="sd">        validator_factory: 验证器工厂函数</span>
+<span class="sd">        description: 描述</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        装饰器函数</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">processor_factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="n">display_name</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="n">file_extension</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">config_class</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span><span class="p">,</span>
+            <span class="n">validator_factory</span><span class="o">=</span><span class="n">validator_factory</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="n">description</span>
+        <span class="p">)</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">processor_factory</span>
+    <span class="k">return</span> <span class="n">decorator</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

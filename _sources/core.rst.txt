@@ -1,0 +1,85 @@
+core package
+============
+
+Submodules
+----------
+
+core.base\_sentence\_generator module
+-------------------------------------
+
+.. automodule:: core.base_sentence_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.config\_manager module
+---------------------------
+
+.. automodule:: core.config_manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.constants module
+---------------------
+
+.. automodule:: core.constants
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.engine\_processor module
+-----------------------------
+
+.. automodule:: core.engine_processor
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.engine\_registry module
+----------------------------
+
+.. automodule:: core.engine_registry
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.exceptions module
+----------------------
+
+.. automodule:: core.exceptions
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.logger module
+------------------
+
+.. automodule:: core.logger
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.param\_translator module
+-----------------------------
+
+.. automodule:: core.param_translator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+core.sentence\_generator\_manager module
+----------------------------------------
+
+.. automodule:: core.sentence_generator_manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: core
+   :members:
+   :show-inheritance:
+   :undoc-members:

@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gui.controllers.resource_controller &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">gui.controllers.resource_controller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>gui.controllers.resource_controller 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">资源管理控制器</span>
+<span class="sd">连接 GUI 和资源验证/同步逻辑</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">Signal</span><span class="p">,</span> <span class="n">QThread</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+<span class="kn">from</span> <span class="nn">core.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+
+<span class="c1"># 直接导入 CLI 工具的函数</span>
+<span class="kn">from</span> <span class="nn">validate_resources</span> <span class="kn">import</span> <span class="n">validate_excel_file</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ResourceValidateWorker">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceValidateWorker">[文档]</a>
+<span class="k">class</span> <span class="nc">ResourceValidateWorker</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;资源验证工作线程&quot;&quot;&quot;</span>
+
+    <span class="n">progress</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># 进度信息</span>
+    <span class="n">finished</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>  <span class="c1"># 完成信号 (成功, 消息, 结果)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+
+<div class="viewcode-block" id="ResourceValidateWorker.run">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceValidateWorker.run">[文档]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;执行资源验证&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;开始验证资源...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># 获取所有 Excel 文件</span>
+            <span class="n">input_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="p">)</span>
+            <span class="n">excel_files</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">input_dir</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;.xls&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">)</span>
+            <span class="p">]</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">excel_files</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;未找到 Excel 文件&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">return</span>
+
+            <span class="c1"># 配置项目资源目录</span>
+            <span class="n">project_dirs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;图片&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;音频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;audio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;视频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="c1"># 验证每个文件</span>
+            <span class="k">for</span> <span class="n">excel_file</span> <span class="ow">in</span> <span class="n">excel_files</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;验证文件: </span><span class="si">{</span><span class="n">excel_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">validate_excel_file</span><span class="p">(</span><span class="n">excel_file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">project_dirs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;验证文件 </span><span class="si">{</span><span class="n">excel_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> 失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;资源验证完成，请查看报告&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;资源验证失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;验证失败: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="p">{})</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResourceSyncWorker">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceSyncWorker">[文档]</a>
+<span class="k">class</span> <span class="nc">ResourceSyncWorker</span><span class="p">(</span><span class="n">QThread</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;资源同步工作线程&quot;&quot;&quot;</span>
+
+    <span class="n">progress</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>  <span class="c1"># 进度信息</span>
+    <span class="n">finished</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>  <span class="c1"># 完成信号 (成功, 消息)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">,</span> <span class="n">library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">library_path</span> <span class="o">=</span> <span class="n">library_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span> <span class="o">=</span> <span class="n">dry_run</span>
+
+<div class="viewcode-block" id="ResourceSyncWorker.run">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceSyncWorker.run">[文档]</a>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;执行资源同步&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">sync_resources</span> <span class="kn">import</span> <span class="n">ResourceSyncer</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;开始同步资源...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># 配置项目资源目录</span>
+            <span class="n">project_dirs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;图片&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;音频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;audio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;视频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="c1"># 配置资源库目录</span>
+            <span class="n">source_dirs</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;图片&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">library_path</span> <span class="o">/</span> <span class="s2">&quot;images&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;音频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">library_path</span> <span class="o">/</span> <span class="s2">&quot;audio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;视频&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">library_path</span> <span class="o">/</span> <span class="s2">&quot;video&quot;</span><span class="p">,</span>
+            <span class="p">}</span>
+
+            <span class="c1"># 创建同步器</span>
+            <span class="n">syncer</span> <span class="o">=</span> <span class="n">ResourceSyncer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">project_dirs</span><span class="p">,</span> <span class="n">source_dirs</span><span class="p">)</span>
+
+            <span class="c1"># 这里需要找到最新的验证报告</span>
+            <span class="n">report_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="s2">&quot;validation_reports&quot;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">report_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;未找到验证报告，请先运行资源验证&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># 获取最新的报告文件</span>
+            <span class="n">report_files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">report_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*_validation.txt&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">report_files</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;未找到验证报告文件&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="n">latest_report</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">report_files</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;使用报告: </span><span class="si">{</span><span class="n">latest_report</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># 读取缺失文件列表</span>
+            <span class="n">missing_files</span> <span class="o">=</span> <span class="n">syncer</span><span class="o">.</span><span class="n">read_validation_report</span><span class="p">(</span><span class="n">latest_report</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">missing_files</span> <span class="ow">or</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">missing_files</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;没有缺失的文件需要同步&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># 创建同步计划</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="s2">&quot;创建同步计划...&quot;</span><span class="p">)</span>
+            <span class="n">sync_plan</span><span class="p">,</span> <span class="n">not_found</span> <span class="o">=</span> <span class="n">syncer</span><span class="o">.</span><span class="n">create_sync_plan</span><span class="p">(</span><span class="n">missing_files</span><span class="p">)</span>
+
+            <span class="n">total_to_sync</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sync_plan</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">total_not_found</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">not_found</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="n">total_to_sync</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;所有 </span><span class="si">{</span><span class="n">total_not_found</span><span class="si">}</span><span class="s2"> 个文件都未在资源库中找到&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="c1"># 执行同步</span>
+            <span class="n">mode_text</span> <span class="o">=</span> <span class="s2">&quot;（干跑模式）&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;开始同步 </span><span class="si">{</span><span class="n">total_to_sync</span><span class="si">}</span><span class="s2"> 个文件</span><span class="si">{</span><span class="n">mode_text</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="n">syncer</span><span class="o">.</span><span class="n">execute_sync</span><span class="p">(</span><span class="n">sync_plan</span><span class="p">,</span> <span class="n">dry_run</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span><span class="p">)</span>
+
+            <span class="n">copied</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;copied&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">failed</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;failed&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;干跑模式预览完成: 将复制 </span><span class="si">{</span><span class="n">copied</span><span class="si">}</span><span class="s2"> 个文件&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;同步完成: 成功复制 </span><span class="si">{</span><span class="n">copied</span><span class="si">}</span><span class="s2"> 个文件&quot;</span>
+
+            <span class="k">if</span> <span class="n">failed</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">failed</span><span class="si">}</span><span class="s2"> 个文件复制失败&quot;</span>
+            <span class="k">if</span> <span class="n">total_not_found</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;, </span><span class="si">{</span><span class="n">total_not_found</span><span class="si">}</span><span class="s2"> 个文件未找到&quot;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dry_run</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">注意: 当前为干跑模式，未实际执行复制操作&quot;</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;资源同步失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;同步失败: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ResourceController">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceController">[文档]</a>
+<span class="k">class</span> <span class="nc">ResourceController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;资源管理控制器&quot;&quot;&quot;</span>
+
+    <span class="c1"># 定义信号</span>
+    <span class="n">validate_progress</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">validate_finished</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+    <span class="n">sync_progress</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">sync_finished</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">AppConfig</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_window</span> <span class="o">=</span> <span class="n">main_window</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_report_path</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ResourceController.validate_resources">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceController.validate_resources">[文档]</a>
+    <span class="k">def</span> <span class="nf">validate_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;验证资源&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;资源验证正在进行中&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 添加日志处理器</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_window</span><span class="o">.</span><span class="n">resource_log_handler</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span> <span class="o">=</span> <span class="n">ResourceValidateWorker</span><span class="p">(</span><span class="n">config</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_on_validate_progress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_on_validate_finished</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ResourceController.sync_resources">
+<a class="viewcode-back" href="../../../gui.controllers.html#gui.controllers.resource_controller.ResourceController.sync_resources">[文档]</a>
+    <span class="k">def</span> <span class="nf">sync_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;同步资源&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;资源同步正在进行中&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># 添加日志处理器</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_window</span><span class="o">.</span><span class="n">resource_log_handler</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span> <span class="o">=</span> <span class="n">ResourceSyncWorker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">library_path</span><span class="p">,</span> <span class="n">dry_run</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span><span class="o">.</span><span class="n">progress</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_on_sync_progress</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span><span class="o">.</span><span class="n">finished</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_on_sync_finished</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_worker</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_on_validate_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;处理验证进度更新&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_validate_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">missing_files</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;处理验证完成事件&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validate_finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">missing_files</span><span class="p">)</span>
+
+        <span class="c1"># 移除日志处理器</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_window</span><span class="o">.</span><span class="n">resource_log_handler</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_sync_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;处理同步进度更新&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_progress</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_on_sync_finished</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;处理同步完成事件&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sync_finished</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+        <span class="c1"># 移除日志处理器</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">main_window</span><span class="o">.</span><span class="n">resource_log_handler</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

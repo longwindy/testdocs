@@ -1,0 +1,69 @@
+tests.core package
+==================
+
+Submodules
+----------
+
+tests.core.test\_base\_sentence\_generator module
+-------------------------------------------------
+
+.. automodule:: tests.core.test_base_sentence_generator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_config\_manager module
+---------------------------------------
+
+.. automodule:: tests.core.test_config_manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_constants module
+---------------------------------
+
+.. automodule:: tests.core.test_constants
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_engine\_processor module
+-----------------------------------------
+
+.. automodule:: tests.core.test_engine_processor
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_engine\_registry module
+----------------------------------------
+
+.. automodule:: tests.core.test_engine_registry
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_param\_translator module
+-----------------------------------------
+
+.. automodule:: tests.core.test_param_translator
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+tests.core.test\_sentence\_generator\_manager module
+----------------------------------------------------
+
+.. automodule:: tests.core.test_sentence_generator_manager
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: tests.core
+   :members:
+   :show-inheritance:
+   :undoc-members:

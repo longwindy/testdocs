@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gui.ui.main_window &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">gui.ui.main_window</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>gui.ui.main_window 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">主窗口 UI 设计</span>
+<span class="sd">使用代码方式创建 UI，便于维护和修改</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtWidgets</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QMainWindow</span><span class="p">,</span> <span class="n">QWidget</span><span class="p">,</span> <span class="n">QVBoxLayout</span><span class="p">,</span> <span class="n">QHBoxLayout</span><span class="p">,</span>
+    <span class="n">QTabWidget</span><span class="p">,</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QLineEdit</span><span class="p">,</span> <span class="n">QPushButton</span><span class="p">,</span>
+    <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QCheckBox</span><span class="p">,</span> <span class="n">QTextEdit</span><span class="p">,</span> <span class="n">QProgressBar</span><span class="p">,</span>
+    <span class="n">QGroupBox</span><span class="p">,</span> <span class="n">QFileDialog</span><span class="p">,</span> <span class="n">QMessageBox</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">PySide6.QtCore</span> <span class="kn">import</span> <span class="n">Qt</span>
+<span class="kn">from</span> <span class="nn">gui.utils.drag_drop_widgets</span> <span class="kn">import</span> <span class="n">DragDropLineEdit</span>
+
+
+<div class="viewcode-block" id="MainWindowUI">
+<a class="viewcode-back" href="../../../gui.ui.html#gui.ui.main_window.MainWindowUI">[文档]</a>
+<span class="k">class</span> <span class="nc">MainWindowUI</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;主窗口 UI 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MainWindowUI.setup_ui">
+<a class="viewcode-back" href="../../../gui.ui.html#gui.ui.main_window.MainWindowUI.setup_ui">[文档]</a>
+    <span class="k">def</span> <span class="nf">setup_ui</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="n">QMainWindow</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;设置 UI&quot;&quot;&quot;</span>
+        <span class="n">main_window</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Scenario Tool - 视觉小说脚本工具&quot;</span><span class="p">)</span>
+        <span class="n">main_window</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="mi">900</span><span class="p">,</span> <span class="mi">700</span><span class="p">)</span>
+
+        <span class="c1"># 中央部件</span>
+        <span class="n">central_widget</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">main_window</span><span class="o">.</span><span class="n">setCentralWidget</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="c1"># 主布局</span>
+        <span class="n">main_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">central_widget</span><span class="p">)</span>
+
+        <span class="c1"># 创建标签页</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span> <span class="o">=</span> <span class="n">QTabWidget</span><span class="p">()</span>
+        <span class="n">main_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span><span class="p">)</span>
+
+        <span class="c1"># 添加各个标签页</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_scenario_tab</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_param_tab</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_resource_tab</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_config_tab</span><span class="p">()</span>
+
+        <span class="c1"># 状态栏</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span> <span class="o">=</span> <span class="n">main_window</span><span class="o">.</span><span class="n">statusBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_bar</span><span class="o">.</span><span class="n">showMessage</span><span class="p">(</span><span class="s2">&quot;就绪&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_create_scenario_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建脚本生成标签页&quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span>
+
+        <span class="c1"># 配置组</span>
+        <span class="n">config_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;脚本生成配置&quot;</span><span class="p">)</span>
+        <span class="n">config_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># 引擎类型</span>
+        <span class="n">engine_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;引擎类型:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_engine_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_engine_combo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span> <span class="s2">&quot;Naninovel&quot;</span><span class="p">])</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_engine_combo</span><span class="p">)</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">engine_layout</span><span class="p">)</span>
+
+        <span class="c1"># 输入目录</span>
+        <span class="n">input_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;输入目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">(</span><span class="s2">&quot;input/&quot;</span><span class="p">)</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_input_btn</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">input_layout</span><span class="p">)</span>
+
+        <span class="c1"># 输出目录</span>
+        <span class="n">output_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;输出目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_output_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">(</span><span class="s2">&quot;output/&quot;</span><span class="p">)</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_output_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_output_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_output_btn</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">output_layout</span><span class="p">)</span>
+
+        <span class="c1"># 忽略模式</span>
+        <span class="n">ignore_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_ignore_check</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s2">&quot;启用忽略模式&quot;</span><span class="p">)</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_ignore_check</span><span class="p">)</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;忽略词:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_ignore_edit</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">(</span><span class="s2">&quot;忽略,&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_ignore_edit</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_ignore_edit</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">ignore_layout</span><span class="p">)</span>
+
+        <span class="n">config_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">config_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">config_group</span><span class="p">)</span>
+
+        <span class="c1"># 操作按钮</span>
+        <span class="n">btn_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_generate_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;生成脚本&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_generate_btn</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_generate_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">btn_layout</span><span class="p">)</span>
+
+        <span class="c1"># 进度条</span>
+        <span class="n">progress_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;进度:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_progress</span> <span class="o">=</span> <span class="n">QProgressBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_progress</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_progress</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">progress_layout</span><span class="p">)</span>
+
+        <span class="c1"># 日志输出</span>
+        <span class="n">log_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;日志输出&quot;</span><span class="p">)</span>
+        <span class="n">log_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_log</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_log</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_log</span><span class="p">)</span>
+        <span class="n">log_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">log_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">log_group</span><span class="p">)</span>
+
+        <span class="c1"># 恢复按钮（放在日志下方靠右）</span>
+        <span class="n">reset_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_reset_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;恢复默认&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scenario_reset_btn</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scenario_reset_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">reset_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="s2">&quot;脚本生成&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_param_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建参数映射标签页&quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span>
+
+        <span class="c1"># 配置组</span>
+        <span class="n">config_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;参数映射配置&quot;</span><span class="p">)</span>
+        <span class="n">config_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># 引擎类型</span>
+        <span class="n">engine_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;引擎类型:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_engine_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_engine_combo</span><span class="p">)</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">engine_layout</span><span class="p">)</span>
+
+        <span class="c1"># 参数配置目录</span>
+        <span class="n">param_dir_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">param_dir_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;参数配置目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_config_dir_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">param_dir_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_config_dir_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_config_dir_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">param_dir_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_config_dir_btn</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">param_dir_layout</span><span class="p">)</span>
+
+        <span class="c1"># 参数文件路径（只读提示）</span>
+        <span class="n">param_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;参数文件:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_file_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;param_config/param_data_renpy.xlsx&quot;</span><span class="p">)</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_file_label</span><span class="p">)</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">param_layout</span><span class="p">)</span>
+
+        <span class="c1"># 差分参数文件（只读提示）</span>
+        <span class="n">varient_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">varient_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;差分文件:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_varient_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;param_config/varient_data.xlsx&quot;</span><span class="p">)</span>
+        <span class="n">varient_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_varient_label</span><span class="p">)</span>
+        <span class="n">varient_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">varient_layout</span><span class="p">)</span>
+
+        <span class="n">config_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">config_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">config_group</span><span class="p">)</span>
+
+        <span class="c1"># 操作按钮</span>
+        <span class="n">btn_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_update_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;更新参数映射&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_update_btn</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_update_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">btn_layout</span><span class="p">)</span>
+
+        <span class="c1"># 进度条</span>
+        <span class="n">progress_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;进度:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_progress</span> <span class="o">=</span> <span class="n">QProgressBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_progress</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_progress</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">progress_layout</span><span class="p">)</span>
+
+        <span class="c1"># 日志输出</span>
+        <span class="n">log_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;日志输出&quot;</span><span class="p">)</span>
+        <span class="n">log_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_log</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_log</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_log</span><span class="p">)</span>
+        <span class="n">log_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">log_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">log_group</span><span class="p">)</span>
+
+        <span class="c1"># 恢复按钮（放在日志下方靠右）</span>
+        <span class="n">reset_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_reset_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;恢复默认&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_reset_btn</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">param_reset_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">reset_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="s2">&quot;参数映射&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_resource_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建资源管理标签页&quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span>
+
+        <span class="c1"># 配置组</span>
+        <span class="n">config_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;资源管理配置&quot;</span><span class="p">)</span>
+        <span class="n">config_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># 项目目录（输入目录）</span>
+        <span class="n">project_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">project_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;项目目录:&quot;</span><span class="p">)</span>
+        <span class="n">project_label</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">project_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">project_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_project_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">project_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_project_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_project_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">project_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_project_btn</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">project_layout</span><span class="p">)</span>
+
+        <span class="c1"># 资源库目录</span>
+        <span class="n">library_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">library_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;资源库:&quot;</span><span class="p">)</span>
+        <span class="n">library_label</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+        <span class="n">library_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">library_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_library_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">library_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_library_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_library_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">library_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_library_btn</span><span class="p">)</span>
+        <span class="n">config_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">library_layout</span><span class="p">)</span>
+
+        <span class="n">config_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">config_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">config_group</span><span class="p">)</span>
+
+        <span class="c1"># 干跑模式选项</span>
+        <span class="n">dry_run_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_dry_run_check</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s2">&quot;干跑模式（仅预览，不实际复制）&quot;</span><span class="p">)</span>
+        <span class="n">dry_run_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_dry_run_check</span><span class="p">)</span>
+        <span class="n">dry_run_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">dry_run_layout</span><span class="p">)</span>
+
+        <span class="c1"># 操作按钮</span>
+        <span class="n">btn_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_validate_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;验证资源&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_validate_btn</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_validate_btn</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_sync_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;同步资源&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_sync_btn</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_sync_btn</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_sync_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">btn_layout</span><span class="p">)</span>
+
+        <span class="c1"># 进度条</span>
+        <span class="n">progress_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;进度:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_progress</span> <span class="o">=</span> <span class="n">QProgressBar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_progress</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">progress_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_progress</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">progress_layout</span><span class="p">)</span>
+
+        <span class="c1"># 日志输出</span>
+        <span class="n">log_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;日志输出&quot;</span><span class="p">)</span>
+        <span class="n">log_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_log</span> <span class="o">=</span> <span class="n">QTextEdit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_log</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_log</span><span class="p">)</span>
+        <span class="n">log_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">log_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">log_group</span><span class="p">)</span>
+
+        <span class="c1"># 恢复按钮（放在日志下方靠右）</span>
+        <span class="n">reset_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_reset_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;恢复默认&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource_reset_btn</span><span class="o">.</span><span class="n">setMaximumWidth</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
+        <span class="n">reset_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resource_reset_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">reset_layout</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="s2">&quot;资源管理&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_create_config_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建配置标签页&quot;&quot;&quot;</span>
+        <span class="n">tab</span> <span class="o">=</span> <span class="n">QWidget</span><span class="p">()</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">(</span><span class="n">tab</span><span class="p">)</span>
+
+        <span class="c1"># 路径配置组</span>
+        <span class="n">path_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;路径配置&quot;</span><span class="p">)</span>
+        <span class="n">path_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># 输入目录</span>
+        <span class="n">input_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;输入目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_input_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_input_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_input_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">input_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_input_btn</span><span class="p">)</span>
+        <span class="n">path_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">input_layout</span><span class="p">)</span>
+
+        <span class="c1"># 输出目录</span>
+        <span class="n">output_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;输出目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_output_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_output_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_output_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">output_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_output_btn</span><span class="p">)</span>
+        <span class="n">path_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">output_layout</span><span class="p">)</span>
+
+        <span class="c1"># 参数配置目录</span>
+        <span class="n">param_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;参数配置目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_param_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_param_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">param_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_param_btn</span><span class="p">)</span>
+        <span class="n">path_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">param_layout</span><span class="p">)</span>
+
+        <span class="c1"># 日志目录</span>
+        <span class="n">log_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;日志目录:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_log_edit</span> <span class="o">=</span> <span class="n">DragDropLineEdit</span><span class="p">()</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_log_edit</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_log_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;浏览...&quot;</span><span class="p">)</span>
+        <span class="n">log_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_log_btn</span><span class="p">)</span>
+        <span class="n">path_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">log_layout</span><span class="p">)</span>
+
+        <span class="n">path_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">path_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">path_group</span><span class="p">)</span>
+
+        <span class="c1"># 处理配置组</span>
+        <span class="n">process_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;处理配置&quot;</span><span class="p">)</span>
+        <span class="n">process_layout</span> <span class="o">=</span> <span class="n">QVBoxLayout</span><span class="p">()</span>
+
+        <span class="c1"># 忽略模式</span>
+        <span class="n">ignore_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_ignore_check</span> <span class="o">=</span> <span class="n">QCheckBox</span><span class="p">(</span><span class="s2">&quot;启用忽略模式&quot;</span><span class="p">)</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_ignore_check</span><span class="p">)</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;忽略词:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_ignore_edit</span> <span class="o">=</span> <span class="n">QLineEdit</span><span class="p">()</span>
+        <span class="n">ignore_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_ignore_edit</span><span class="p">)</span>
+        <span class="n">process_layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">ignore_layout</span><span class="p">)</span>
+
+        <span class="n">process_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">process_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">process_group</span><span class="p">)</span>
+
+        <span class="c1"># 引擎配置组</span>
+        <span class="n">engine_group</span> <span class="o">=</span> <span class="n">QGroupBox</span><span class="p">(</span><span class="s2">&quot;引擎配置&quot;</span><span class="p">)</span>
+        <span class="n">engine_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">QLabel</span><span class="p">(</span><span class="s2">&quot;引擎类型:&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_engine_combo</span> <span class="o">=</span> <span class="n">QComboBox</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_engine_combo</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span> <span class="s2">&quot;Naninovel&quot;</span><span class="p">])</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_engine_combo</span><span class="p">)</span>
+        <span class="n">engine_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="n">engine_group</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="n">engine_layout</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="n">engine_group</span><span class="p">)</span>
+
+        <span class="c1"># 操作按钮</span>
+        <span class="n">btn_layout</span> <span class="o">=</span> <span class="n">QHBoxLayout</span><span class="p">()</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_save_btn</span> <span class="o">=</span> <span class="n">QPushButton</span><span class="p">(</span><span class="s2">&quot;保存配置&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_save_btn</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span>
+        <span class="n">btn_layout</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config_save_btn</span><span class="p">)</span>
+        <span class="n">layout</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="n">btn_layout</span><span class="p">)</span>
+
+        <span class="n">layout</span><span class="o">.</span><span class="n">addStretch</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_widget</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab</span><span class="p">,</span> <span class="s2">&quot;默认配置&quot;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

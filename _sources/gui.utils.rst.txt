@@ -1,0 +1,37 @@
+gui.utils package
+=================
+
+Submodules
+----------
+
+gui.utils.drag\_drop\_widgets module
+------------------------------------
+
+.. automodule:: gui.utils.drag_drop_widgets
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+gui.utils.log\_handler module
+-----------------------------
+
+.. automodule:: gui.utils.log_handler
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+gui.utils.styles module
+-----------------------
+
+.. automodule:: gui.utils.styles
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: gui.utils
+   :members:
+   :show-inheritance:
+   :undoc-members:

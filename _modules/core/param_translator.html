@@ -1,0 +1,423 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>core.param_translator &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">core.param_translator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>core.param_translator 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">参数翻译器模块</span>
+<span class="sd">负责将用户友好的参数名称翻译为引擎特定的语法</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">importlib.util</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">core.logger</span> <span class="kn">import</span> <span class="n">get_logger</span>
+<span class="kn">from</span> <span class="nn">core.exceptions</span> <span class="kn">import</span> <span class="n">TranslationError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">get_logger</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="ParamTranslator">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator">[文档]</a>
+<span class="k">class</span> <span class="nc">ParamTranslator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    参数翻译器类，用于加载参数映射并提供翻译功能</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">module_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;param_config/param_mappings.py&quot;</span><span class="p">,</span>
+        <span class="n">varient_module_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;param_config/varient_mappings.py&quot;</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        初始化参数翻译器</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            module_file: 基础参数映射模块文件路径</span>
+<span class="sd">            varient_module_file: 差分参数映射模块文件路径</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">module_file</span> <span class="o">=</span> <span class="n">module_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varient_module_file</span> <span class="o">=</span> <span class="n">varient_module_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_mappings</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">varient_mappings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_varient_mappings</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;参数翻译器初始化完成，加载了 </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个参数类型&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_load_mappings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        从Python模块加载映射字典</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, Dict[str, str]]: 映射字典，如果加载失败则返回空字典</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_file</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;映射文件不存在: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">module_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span>
+                <span class="s2">&quot;param_mappings&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">module_file</span>
+            <span class="p">)</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+            <span class="n">mappings</span> <span class="o">=</span> <span class="n">module</span><span class="o">.</span><span class="n">PARAM_MAPPINGS</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;成功加载基础参数映射: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">mappings</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个类型&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mappings</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;加载映射模块失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_load_varient_mappings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        从Python模块加载差分映射字典</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, Dict[str, str]]: 差分映射字典，如果加载失败则返回空字典</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">varient_module_file</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;差分映射文件不存在: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">varient_module_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">spec_from_file_location</span><span class="p">(</span>
+                <span class="s2">&quot;varient_mappings&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">varient_module_file</span>
+            <span class="p">)</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">module</span><span class="p">)</span>
+            <span class="n">varient_mappings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="s2">&quot;VARIENT_MAPPINGS&quot;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;成功加载差分参数映射: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">varient_mappings</span><span class="p">)</span><span class="si">}</span><span class="s2"> 个角色&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">varient_mappings</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;加载差分映射模块失败: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ParamTranslator.translate">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.translate">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        翻译单个参数</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param_type: 参数类型（如&quot;Layer&quot;, &quot;Transform&quot;, &quot;Transition&quot;）</span>
+<span class="sd">            param: 要翻译的参数值</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: 翻译后的参数值，如果找不到映射则返回原值</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="n">param_type</span><span class="p">]:</span>
+                <span class="n">translated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="n">param_type</span><span class="p">][</span><span class="n">param</span><span class="p">]</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;翻译参数: </span><span class="si">{</span><span class="n">param_type</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2"> -&gt; </span><span class="si">{</span><span class="n">translated</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">translated</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;参数 &#39;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#39; 在类型 &#39;</span><span class="si">{</span><span class="n">param_type</span><span class="si">}</span><span class="s2">&#39; 的映射中未找到，返回原值&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">param</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;参数类型 &#39;</span><span class="si">{</span><span class="n">param_type</span><span class="si">}</span><span class="s2">&#39; 在映射中未找到，返回原值&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">param</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.translate_varient">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.translate_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        翻译差分参数</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param: 要翻译的差分参数值</span>
+<span class="sd">            role: 角色名</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: 翻译后的参数值</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 如果没有提供角色名，尝试从基础映射中查找</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;Varient&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span> <span class="ow">and</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="s2">&quot;Varient&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="s2">&quot;Varient&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;差分参数 &#39;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#39; 在基础映射中未找到，且未提供角色名&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">param</span>
+
+        <span class="c1"># 使用角色特定的映射</span>
+        <span class="k">if</span> <span class="n">role</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">varient_mappings</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">varient_mappings</span><span class="p">[</span><span class="n">role</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">varient_mappings</span><span class="p">[</span><span class="n">role</span><span class="p">][</span><span class="n">param</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;角色 &#39;</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">&#39; 的差分参数 &#39;</span><span class="si">{</span><span class="n">param</span><span class="si">}</span><span class="s2">&#39; 在映射中未找到&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">param</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;角色 &#39;</span><span class="si">{</span><span class="n">role</span><span class="si">}</span><span class="s2">&#39; 在差分映射中未找到&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">param</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.translate_batch">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.translate_batch">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        批量翻译参数</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param_type: 参数类型</span>
+<span class="sd">            params: 要翻译的参数列表</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: 翻译后的参数列表</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">param_type</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.get_available_types">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.get_available_types">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_available_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        获取可用的参数类型列表</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: 参数类型列表</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.get_params_for_type">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.get_params_for_type">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_params_for_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        获取指定参数类型的所有原始参数</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param_type: 参数类型</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: 原始参数列表，如果类型不存在则返回空列表</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="n">param_type</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.get_translations_for_type">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.get_translations_for_type">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_translations_for_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        获取指定参数类型的所有翻译后参数</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param_type: 参数类型</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            list: 翻译后参数列表，如果类型不存在则返回空列表</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">param_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="n">param_type</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="ParamTranslator.has_mapping">
+<a class="viewcode-back" href="../../core.html#core.param_translator.ParamTranslator.has_mapping">[文档]</a>
+    <span class="k">def</span> <span class="nf">has_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        检查是否存在指定参数的映射</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            param_type: 参数类型</span>
+<span class="sd">            param: 参数值</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: 是否存在映射</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">param_type</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span> <span class="ow">and</span>
+            <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mappings</span><span class="p">[</span><span class="n">param_type</span><span class="p">]</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<span class="c1"># 特定参数类型的翻译器类（可选，提供更友好的API）</span>
+<div class="viewcode-block" id="LayerTranslator">
+<a class="viewcode-back" href="../../core.html#core.param_translator.LayerTranslator">[文档]</a>
+<span class="k">class</span> <span class="nc">LayerTranslator</span><span class="p">(</span><span class="n">ParamTranslator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Layer参数翻译器&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LayerTranslator.translate_layer">
+<a class="viewcode-back" href="../../core.html#core.param_translator.LayerTranslator.translate_layer">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;翻译Layer参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Layer&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LayerTranslator.get_layer_params">
+<a class="viewcode-back" href="../../core.html#core.param_translator.LayerTranslator.get_layer_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_layer_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Layer原始参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params_for_type</span><span class="p">(</span><span class="s2">&quot;Layer&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LayerTranslator.get_layer_translations">
+<a class="viewcode-back" href="../../core.html#core.param_translator.LayerTranslator.get_layer_translations">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_layer_translations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Layer翻译后参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_translations_for_type</span><span class="p">(</span><span class="s2">&quot;Layer&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TransformTranslator">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransformTranslator">[文档]</a>
+<span class="k">class</span> <span class="nc">TransformTranslator</span><span class="p">(</span><span class="n">ParamTranslator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transform参数翻译器&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TransformTranslator.translate_transform">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransformTranslator.translate_transform">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;翻译Transform参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Transform&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransformTranslator.get_transform_params">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransformTranslator.get_transform_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_transform_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Transform原始参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params_for_type</span><span class="p">(</span><span class="s2">&quot;Transform&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransformTranslator.get_transform_translations">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransformTranslator.get_transform_translations">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_transform_translations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Transform翻译后参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_translations_for_type</span><span class="p">(</span><span class="s2">&quot;Transform&quot;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TransitionTranslator">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransitionTranslator">[文档]</a>
+<span class="k">class</span> <span class="nc">TransitionTranslator</span><span class="p">(</span><span class="n">ParamTranslator</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Transition参数翻译器&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TransitionTranslator.translate_transition">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransitionTranslator.translate_transition">[文档]</a>
+    <span class="k">def</span> <span class="nf">translate_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;翻译Transition参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s2">&quot;Transition&quot;</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransitionTranslator.get_transition_params">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransitionTranslator.get_transition_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_transition_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Transition原始参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_params_for_type</span><span class="p">(</span><span class="s2">&quot;Transition&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransitionTranslator.get_transition_translations">
+<a class="viewcode-back" href="../../core.html#core.param_translator.TransitionTranslator.get_transition_translations">[文档]</a>
+    <span class="k">def</span> <span class="nf">get_transition_translations</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;获取所有Transition翻译后参数&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_translations_for_type</span><span class="p">(</span><span class="s2">&quot;Transition&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

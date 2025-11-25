@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.core.test_engine_registry &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.core.test_engine_registry</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.core.test_engine_registry 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 engine_registry 模块</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">Mock</span>
+<span class="kn">from</span> <span class="nn">core.engine_registry</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">EngineMetadata</span><span class="p">,</span>
+    <span class="n">EngineRegistry</span><span class="p">,</span>
+    <span class="n">register_engine</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">EngineConfig</span><span class="p">,</span> <span class="n">RenpyConfig</span><span class="p">,</span> <span class="n">NaninovelConfig</span>
+<span class="kn">from</span> <span class="nn">core.exceptions</span> <span class="kn">import</span> <span class="n">EngineNotRegisteredError</span>
+
+
+<div class="viewcode-block" id="TestEngineMetadata">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineMetadata">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 EngineMetadata 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineMetadata.test_create_metadata">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineMetadata.test_create_metadata">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_create_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建引擎元数据&quot;&quot;&quot;</span>
+        <span class="n">processor_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">validator_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test Engine&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span><span class="p">,</span>
+            <span class="n">validator_factory</span><span class="o">=</span><span class="n">validator_factory</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A test engine&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Test Engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.test&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">config_class</span> <span class="o">==</span> <span class="n">EngineConfig</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">processor_factory</span> <span class="o">==</span> <span class="n">processor_factory</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">validator_factory</span> <span class="o">==</span> <span class="n">validator_factory</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;A test engine&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestEngineMetadata.test_create_metadata_without_optional_fields">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineMetadata.test_create_metadata_without_optional_fields">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_create_metadata_without_optional_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建引擎元数据（不包含可选字段）&quot;&quot;&quot;</span>
+        <span class="n">processor_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;minimal_engine&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Minimal Engine&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.min&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span>
+        <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;minimal_engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">validator_factory</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEngineRegistry">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineRegistry</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 EngineRegistry 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineRegistry.reset_registry">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.reset_registry">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reset_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;每个测试前重置注册表&quot;&quot;&quot;</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">yield</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_singleton_pattern">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_singleton_pattern">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_singleton_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试单例模式&quot;&quot;&quot;</span>
+        <span class="n">registry1</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="p">()</span>
+        <span class="n">registry2</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">registry1</span> <span class="ow">is</span> <span class="n">registry2</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_register_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_register_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试注册引擎&quot;&quot;&quot;</span>
+        <span class="n">processor_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;renpy&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.rpy&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">RenpyConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_register_duplicate_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_register_duplicate_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_duplicate_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试注册重复引擎（应该覆盖）&quot;&quot;&quot;</span>
+        <span class="n">processor_factory1</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">processor_factory2</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="n">metadata1</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test 1&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory1</span>
+        <span class="p">)</span>
+
+        <span class="n">metadata2</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test 2&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test2&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory2</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata1</span><span class="p">)</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata2</span><span class="p">)</span>
+
+        <span class="c1"># 应该被覆盖为第二个</span>
+        <span class="n">retrieved</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Test 2&quot;</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.test2&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_get_registered_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_get_registered_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_registered_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取已注册引擎&quot;&quot;&quot;</span>
+        <span class="n">processor_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;naninovel&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Naninovel&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.nani&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">NaninovelConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Naninovel engine&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">retrieved</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;naninovel&quot;</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Naninovel&quot;</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.nani&quot;</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">config_class</span> <span class="o">==</span> <span class="n">NaninovelConfig</span>
+        <span class="k">assert</span> <span class="n">retrieved</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;Naninovel engine&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_get_unregistered_engine">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_get_unregistered_engine">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_get_unregistered_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试获取未注册引擎（应该抛出异常）&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="n">EngineNotRegisteredError</span><span class="p">,</span> <span class="n">match</span><span class="o">=</span><span class="s2">&quot;引擎 &#39;nonexistent&#39; 未注册&quot;</span><span class="p">):</span>
+            <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nonexistent&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_is_registered_true">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_is_registered_true">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_is_registered_true</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试检查已注册引擎&quot;&quot;&quot;</span>
+        <span class="n">processor_factory</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor_factory</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_is_registered_false">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_is_registered_false">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_is_registered_false</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试检查未注册引擎&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;nonexistent&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_list_engines_empty">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_empty">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_list_engines_empty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试列出引擎（空注册表）&quot;&quot;&quot;</span>
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">engines</span> <span class="o">==</span> <span class="p">{}</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">engines</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_list_engines_with_multiple_engines">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_with_multiple_engines">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_list_engines_with_multiple_engines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试列出多个引擎&quot;&quot;&quot;</span>
+        <span class="n">processor1</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">processor2</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="n">metadata1</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;renpy&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.rpy&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">RenpyConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor1</span>
+        <span class="p">)</span>
+
+        <span class="n">metadata2</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;naninovel&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Naninovel&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.nani&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">NaninovelConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor2</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata1</span><span class="p">)</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata2</span><span class="p">)</span>
+
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">engines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="s2">&quot;renpy&quot;</span> <span class="ow">in</span> <span class="n">engines</span>
+        <span class="k">assert</span> <span class="s2">&quot;naninovel&quot;</span> <span class="ow">in</span> <span class="n">engines</span>
+        <span class="k">assert</span> <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;renpy&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Ren&#39;Py&quot;</span>
+        <span class="k">assert</span> <span class="n">engines</span><span class="p">[</span><span class="s2">&quot;naninovel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Naninovel&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_list_engines_returns_copy">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_list_engines_returns_copy">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_list_engines_returns_copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试 list_engines 返回副本（不影响原注册表）&quot;&quot;&quot;</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+
+        <span class="c1"># 修改返回的字典</span>
+        <span class="n">engines</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+        <span class="c1"># 原注册表不应该被影响</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistry.test_reset_registry">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistry.test_reset_registry">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_reset_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试重置注册表&quot;&quot;&quot;</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineMetadata</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span><span class="p">,</span>
+            <span class="n">processor_factory</span><span class="o">=</span><span class="n">processor</span>
+        <span class="p">)</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span> <span class="o">==</span> <span class="p">{}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator">[文档]</a>
+<span class="k">class</span> <span class="nc">TestRegisterEngineDecorator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 register_engine 装饰器&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator.reset_registry">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.reset_registry">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reset_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;每个测试前重置注册表&quot;&quot;&quot;</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">yield</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator.test_register_engine_decorator_basic">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_basic">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_engine_decorator_basic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试基础装饰器功能&quot;&quot;&quot;</span>
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_engine&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Test Engine&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.test&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_processor</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="c1"># 验证引擎已注册</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 验证元数据</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_engine&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;test_engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Test Engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.test&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">config_class</span> <span class="o">==</span> <span class="n">EngineConfig</span>
+
+        <span class="c1"># 验证装饰器返回原函数</span>
+        <span class="k">assert</span> <span class="nb">callable</span><span class="p">(</span><span class="n">create_processor</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator.test_register_engine_decorator_with_all_params">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_with_all_params">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_engine_decorator_with_all_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试装饰器包含所有参数&quot;&quot;&quot;</span>
+        <span class="n">validator</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;full_engine&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Full Engine&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.full&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">RenpyConfig</span><span class="p">,</span>
+            <span class="n">validator_factory</span><span class="o">=</span><span class="n">validator</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A fully configured engine&quot;</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_processor</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Mock</span><span class="p">()</span>
+
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;full_engine&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;full_engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Full Engine&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.full&quot;</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">config_class</span> <span class="o">==</span> <span class="n">RenpyConfig</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">validator_factory</span> <span class="o">==</span> <span class="n">validator</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">description</span> <span class="o">==</span> <span class="s2">&quot;A fully configured engine&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator.test_register_engine_decorator_preserves_function">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_engine_decorator_preserves_function">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_engine_decorator_preserves_function</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试装饰器保留原函数功能&quot;&quot;&quot;</span>
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;func_test&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Function Test&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.func&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_processor</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Processor with </span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># 验证函数仍然可以正常调用</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">create_processor</span><span class="p">(</span><span class="s2">&quot;test_config&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="s2">&quot;Processor with test_config&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestRegisterEngineDecorator.test_register_multiple_engines_with_decorator">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestRegisterEngineDecorator.test_register_multiple_engines_with_decorator">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_register_multiple_engines_with_decorator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试使用装饰器注册多个引擎&quot;&quot;&quot;</span>
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;engine1&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Engine 1&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.e1&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_processor1</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s2">&quot;processor1&quot;</span>
+
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;engine2&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Engine 2&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.e2&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">EngineConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_processor2</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s2">&quot;processor2&quot;</span>
+
+        <span class="c1"># 验证两个引擎都已注册</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;engine1&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;engine2&quot;</span><span class="p">)</span>
+
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">engines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEngineRegistryIntegration">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEngineRegistryIntegration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;集成测试：测试完整的引擎注册和使用流程&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEngineRegistryIntegration.reset_registry">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.reset_registry">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">reset_registry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;每个测试前重置注册表&quot;&quot;&quot;</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">yield</span>
+        <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistryIntegration.test_full_workflow">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.test_full_workflow">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_full_workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试完整工作流程&quot;&quot;&quot;</span>
+        <span class="c1"># 1. 使用装饰器注册引擎</span>
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;renpy&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.rpy&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">RenpyConfig</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Ren&#39;Py visual novel engine&quot;</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_renpy_processor</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;RenpyProcessor(</span><span class="si">{</span><span class="n">config</span><span class="si">}</span><span class="s2">)&quot;</span>
+
+        <span class="c1"># 2. 检查引擎是否已注册</span>
+        <span class="k">assert</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">is_registered</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 3. 获取引擎元数据</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">metadata</span><span class="o">.</span><span class="n">display_name</span> <span class="o">==</span> <span class="s2">&quot;Ren&#39;Py&quot;</span>
+
+        <span class="c1"># 4. 使用 processor_factory 创建处理器</span>
+        <span class="n">processor</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">processor_factory</span><span class="p">(</span><span class="s2">&quot;test_config&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">processor</span> <span class="o">==</span> <span class="s2">&quot;RenpyProcessor(test_config)&quot;</span>
+
+        <span class="c1"># 5. 列出所有引擎</span>
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="s2">&quot;renpy&quot;</span> <span class="ow">in</span> <span class="n">engines</span></div>
+
+
+<div class="viewcode-block" id="TestEngineRegistryIntegration.test_multiple_engines_workflow">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_engine_registry.TestEngineRegistryIntegration.test_multiple_engines_workflow">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_multiple_engines_workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试多引擎工作流程&quot;&quot;&quot;</span>
+        <span class="c1"># 注册多个引擎</span>
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;renpy&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Ren&#39;Py&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.rpy&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">RenpyConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_renpy</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s2">&quot;renpy_processor&quot;</span>
+
+        <span class="nd">@register_engine</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;naninovel&quot;</span><span class="p">,</span>
+            <span class="n">display_name</span><span class="o">=</span><span class="s2">&quot;Naninovel&quot;</span><span class="p">,</span>
+            <span class="n">file_extension</span><span class="o">=</span><span class="s2">&quot;.nani&quot;</span><span class="p">,</span>
+            <span class="n">config_class</span><span class="o">=</span><span class="n">NaninovelConfig</span>
+        <span class="p">)</span>
+        <span class="k">def</span> <span class="nf">create_naninovel</span><span class="p">():</span>
+            <span class="k">return</span> <span class="s2">&quot;naninovel_processor&quot;</span>
+
+        <span class="c1"># 验证所有引擎</span>
+        <span class="n">engines</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">list_engines</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">engines</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+
+        <span class="c1"># 分别获取并使用</span>
+        <span class="n">renpy_meta</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;renpy&quot;</span><span class="p">)</span>
+        <span class="n">nani_meta</span> <span class="o">=</span> <span class="n">EngineRegistry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;naninovel&quot;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">renpy_meta</span><span class="o">.</span><span class="n">processor_factory</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;renpy_processor&quot;</span>
+        <span class="k">assert</span> <span class="n">nani_meta</span><span class="o">.</span><span class="n">processor_factory</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;naninovel_processor&quot;</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

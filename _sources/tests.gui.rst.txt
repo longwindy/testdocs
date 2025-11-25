@@ -1,0 +1,10 @@
+tests.gui package
+=================
+
+Module contents
+---------------
+
+.. automodule:: tests.gui
+   :members:
+   :show-inheritance:
+   :undoc-members:

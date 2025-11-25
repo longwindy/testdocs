@@ -1,0 +1,265 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>engines.naninovel package &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=34969b80"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="engines.naninovel.sentence_generators package" href="engines.naninovel.sentence_generators.html" />
+    <link rel="prev" title="engines package" href="engines.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">scenario_tool</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">core package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="engines.html">engines package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="engines.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">engines.naninovel package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.renpy.html">engines.renpy package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="engines.html#module-engines">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html">generate_scenario module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_test_data.html">generate_test_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html">gui package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_gui.html">run_gui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html">sync_resources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html">update_param module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html">validate_resources module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">scenario_tool</a></li>
+          <li class="breadcrumb-item"><a href="engines.html">engines package</a></li>
+      <li class="breadcrumb-item active">engines.naninovel package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/engines.naninovel.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="engines-naninovel-package">
+<h1>engines.naninovel package<a class="headerlink" href="#engines-naninovel-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="engines.naninovel.sentence_generators.html">engines.naninovel.sentence_generators package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.audio_generator">engines.naninovel.sentence_generators.audio_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.audio_generator.AudioGenerator"><code class="docutils literal notranslate"><span class="pre">AudioGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.category"><code class="docutils literal notranslate"><span class="pre">AudioGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">AudioGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.priority"><code class="docutils literal notranslate"><span class="pre">AudioGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.process"><code class="docutils literal notranslate"><span class="pre">AudioGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.background_generator">engines.naninovel.sentence_generators.background_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator"><code class="docutils literal notranslate"><span class="pre">BackgroundGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.category"><code class="docutils literal notranslate"><span class="pre">BackgroundGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">BackgroundGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.priority"><code class="docutils literal notranslate"><span class="pre">BackgroundGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.process"><code class="docutils literal notranslate"><span class="pre">BackgroundGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.camera_generator">engines.naninovel.sentence_generators.camera_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.camera_generator.CameraGenerator"><code class="docutils literal notranslate"><span class="pre">CameraGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.category"><code class="docutils literal notranslate"><span class="pre">CameraGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">CameraGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.priority"><code class="docutils literal notranslate"><span class="pre">CameraGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.process"><code class="docutils literal notranslate"><span class="pre">CameraGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.character_generator">engines.naninovel.sentence_generators.character_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.character_generator.CharacterGenerator"><code class="docutils literal notranslate"><span class="pre">CharacterGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.category"><code class="docutils literal notranslate"><span class="pre">CharacterGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">CharacterGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.priority"><code class="docutils literal notranslate"><span class="pre">CharacterGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.process"><code class="docutils literal notranslate"><span class="pre">CharacterGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.effect_generator">engines.naninovel.sentence_generators.effect_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.effect_generator.EffectGenerator"><code class="docutils literal notranslate"><span class="pre">EffectGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.category"><code class="docutils literal notranslate"><span class="pre">EffectGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">EffectGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.priority"><code class="docutils literal notranslate"><span class="pre">EffectGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.process"><code class="docutils literal notranslate"><span class="pre">EffectGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.movie_generator">engines.naninovel.sentence_generators.movie_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.movie_generator.MovieGenerator"><code class="docutils literal notranslate"><span class="pre">MovieGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.category"><code class="docutils literal notranslate"><span class="pre">MovieGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">MovieGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.priority"><code class="docutils literal notranslate"><span class="pre">MovieGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.process"><code class="docutils literal notranslate"><span class="pre">MovieGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.note_generator">engines.naninovel.sentence_generators.note_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.note_generator.NoteGenerator"><code class="docutils literal notranslate"><span class="pre">NoteGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.note_generator.NoteGenerator.category"><code class="docutils literal notranslate"><span class="pre">NoteGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.note_generator.NoteGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">NoteGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.note_generator.NoteGenerator.priority"><code class="docutils literal notranslate"><span class="pre">NoteGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.note_generator.NoteGenerator.process"><code class="docutils literal notranslate"><span class="pre">NoteGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.pause_wait_generator">engines.naninovel.sentence_generators.pause_wait_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator"><code class="docutils literal notranslate"><span class="pre">PauseWaitGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.category"><code class="docutils literal notranslate"><span class="pre">PauseWaitGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">PauseWaitGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.priority"><code class="docutils literal notranslate"><span class="pre">PauseWaitGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.process"><code class="docutils literal notranslate"><span class="pre">PauseWaitGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.text_generator">engines.naninovel.sentence_generators.text_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.text_generator.TextGenerator"><code class="docutils literal notranslate"><span class="pre">TextGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.text_generator.TextGenerator.category"><code class="docutils literal notranslate"><span class="pre">TextGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.text_generator.TextGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">TextGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.text_generator.TextGenerator.priority"><code class="docutils literal notranslate"><span class="pre">TextGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.text_generator.TextGenerator.process"><code class="docutils literal notranslate"><span class="pre">TextGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.transition_generator">engines.naninovel.sentence_generators.transition_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator"><code class="docutils literal notranslate"><span class="pre">TransitionGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.category"><code class="docutils literal notranslate"><span class="pre">TransitionGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">TransitionGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.priority"><code class="docutils literal notranslate"><span class="pre">TransitionGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.process"><code class="docutils literal notranslate"><span class="pre">TransitionGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators.voice_generator">engines.naninovel.sentence_generators.voice_generator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator"><code class="docutils literal notranslate"><span class="pre">VoiceGenerator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.category"><code class="docutils literal notranslate"><span class="pre">VoiceGenerator.category</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.param_config"><code class="docutils literal notranslate"><span class="pre">VoiceGenerator.param_config</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.priority"><code class="docutils literal notranslate"><span class="pre">VoiceGenerator.priority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.naninovel.sentence_generators.html#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.process"><code class="docutils literal notranslate"><span class="pre">VoiceGenerator.process()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="engines.naninovel.sentence_generators.html#module-engines.naninovel.sentence_generators">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-engines.naninovel">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-engines.naninovel" title="Link to this heading"></a></h2>
+<p>Naninovel Engine Module
+Naninovel 引擎实现</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="engines.naninovel.create_naninovel_processor">
+<span class="sig-prename descclassname"><span class="pre">engines.naninovel.</span></span><span class="sig-name descname"><span class="pre">create_naninovel_processor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.NaninovelConfig" title="core.config_manager.NaninovelConfig"><span class="pre">NaninovelConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">translator</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel.html#create_naninovel_processor"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.create_naninovel_processor" title="Link to this definition"></a></dt>
+<dd><p>创建 Naninovel 处理器工厂函数</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="engines.html" class="btn btn-neutral float-left" title="engines package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="engines.naninovel.sentence_generators.html" class="btn btn-neutral float-right" title="engines.naninovel.sentence_generators package" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

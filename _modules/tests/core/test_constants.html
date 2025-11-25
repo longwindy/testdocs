@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.core.test_constants &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../../genindex.html" />
+    <link rel="search" title="搜索" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.core.test_constants</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.core.test_constants 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 constants 模块</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">core.constants</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">WindowMode</span><span class="p">,</span>
+    <span class="n">SpecialSpeaker</span><span class="p">,</span>
+    <span class="n">FileType</span><span class="p">,</span>
+    <span class="n">SheetName</span><span class="p">,</span>
+    <span class="n">ColumnName</span><span class="p">,</span>
+    <span class="n">Marker</span><span class="p">,</span>
+    <span class="n">DEFAULT_INDENT_SIZE</span><span class="p">,</span>
+    <span class="n">DEFAULT_BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">DEFAULT_TRANSITION</span><span class="p">,</span>
+    <span class="n">EXCEL_EXTENSIONS</span><span class="p">,</span>
+    <span class="n">RENPY_EXTENSION</span><span class="p">,</span>
+    <span class="n">NANINOVEL_EXTENSION</span><span class="p">,</span>
+    <span class="n">TEMP_FILE_PREFIX</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="TestEnumValues">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumValues">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEnumValues</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试所有枚举的值和类型&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEnumValues.test_enum_values_and_types">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumValues.test_enum_values_and_types">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;enum_member,expected_value&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="c1"># WindowMode</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="s2">&quot;显示&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">HIDE</span><span class="p">,</span> <span class="s2">&quot;隐藏&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW_AND_HIDE</span><span class="p">,</span> <span class="s2">&quot;显示和隐藏&quot;</span><span class="p">),</span>
+        <span class="c1"># SpecialSpeaker</span>
+        <span class="p">(</span><span class="n">SpecialSpeaker</span><span class="o">.</span><span class="n">RENPY_COMMAND</span><span class="p">,</span> <span class="s2">&quot;renpy&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">SpecialSpeaker</span><span class="o">.</span><span class="n">NANINOVEL_COMMAND</span><span class="p">,</span> <span class="s2">&quot;naninovel&quot;</span><span class="p">),</span>
+        <span class="c1"># FileType</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">BACKGROUND</span><span class="p">,</span> <span class="s2">&quot;Background&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">CHARACTER</span><span class="p">,</span> <span class="s2">&quot;Character&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">,</span> <span class="s2">&quot;Music&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">SOUND</span><span class="p">,</span> <span class="s2">&quot;Sound&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">VOICE</span><span class="p">,</span> <span class="s2">&quot;Voice&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">EVENT</span><span class="p">,</span> <span class="s2">&quot;Event&quot;</span><span class="p">),</span>
+        <span class="c1"># SheetName</span>
+        <span class="p">(</span><span class="n">SheetName</span><span class="o">.</span><span class="n">PARAM_SHEET</span><span class="p">,</span> <span class="s2">&quot;参数表&quot;</span><span class="p">),</span>
+        <span class="c1"># ColumnName</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">NOTE</span><span class="p">,</span> <span class="s2">&quot;Note&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">IGNORE</span><span class="p">,</span> <span class="s2">&quot;Ignore&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">SPEAKER</span><span class="p">,</span> <span class="s2">&quot;Speaker&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">TEXT</span><span class="p">,</span> <span class="s2">&quot;Text&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">CHARACTER</span><span class="p">,</span> <span class="s2">&quot;Character&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">BACKGROUND</span><span class="p">,</span> <span class="s2">&quot;Background&quot;</span><span class="p">),</span>
+        <span class="c1"># Marker</span>
+        <span class="p">(</span><span class="n">Marker</span><span class="o">.</span><span class="n">END</span><span class="p">,</span> <span class="s2">&quot;END&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_enum_values_and_types</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enum_member</span><span class="p">,</span> <span class="n">expected_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试枚举成员的值和类型&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">enum_member</span> <span class="o">==</span> <span class="n">expected_value</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">enum_member</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEnumMembers">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumMembers">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEnumMembers</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试枚举成员完整性&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEnumMembers.test_enum_members">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumMembers.test_enum_members">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;enum_class,expected_values,expected_count&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;显示&quot;</span><span class="p">,</span> <span class="s2">&quot;隐藏&quot;</span><span class="p">,</span> <span class="s2">&quot;显示和隐藏&quot;</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">SpecialSpeaker</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;renpy&quot;</span><span class="p">,</span> <span class="s2">&quot;naninovel&quot;</span><span class="p">],</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Background&quot;</span><span class="p">,</span> <span class="s2">&quot;Character&quot;</span><span class="p">,</span> <span class="s2">&quot;Music&quot;</span><span class="p">,</span> <span class="s2">&quot;Sound&quot;</span><span class="p">,</span> <span class="s2">&quot;Voice&quot;</span><span class="p">,</span> <span class="s2">&quot;Event&quot;</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">SheetName</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;参数表&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Note&quot;</span><span class="p">,</span> <span class="s2">&quot;Ignore&quot;</span><span class="p">,</span> <span class="s2">&quot;Speaker&quot;</span><span class="p">,</span> <span class="s2">&quot;Text&quot;</span><span class="p">,</span> <span class="s2">&quot;Character&quot;</span><span class="p">,</span> <span class="s2">&quot;Background&quot;</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">Marker</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;END&quot;</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_enum_members</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enum_class</span><span class="p">,</span> <span class="n">expected_values</span><span class="p">,</span> <span class="n">expected_count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试枚举包含所有预期成员&quot;&quot;&quot;</span>
+        <span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">member</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">member</span> <span class="ow">in</span> <span class="n">enum_class</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">members</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_count</span>
+        <span class="k">for</span> <span class="n">expected_value</span> <span class="ow">in</span> <span class="n">expected_values</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">expected_value</span> <span class="ow">in</span> <span class="n">members</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestDefaultConstants">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestDefaultConstants">[文档]</a>
+<span class="k">class</span> <span class="nc">TestDefaultConstants</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试默认常量&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestDefaultConstants.test_default_constants">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestDefaultConstants.test_default_constants">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;constant,expected_value,expected_type&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">DEFAULT_INDENT_SIZE</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">DEFAULT_BATCH_SIZE</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">DEFAULT_TRANSITION</span><span class="p">,</span> <span class="s2">&quot;dissolve&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_default_constants</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">constant</span><span class="p">,</span> <span class="n">expected_value</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试默认常量的值和类型&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">constant</span> <span class="o">==</span> <span class="n">expected_value</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">constant</span><span class="p">,</span> <span class="n">expected_type</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestFileExtensions">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestFileExtensions">[文档]</a>
+<span class="k">class</span> <span class="nc">TestFileExtensions</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试文件扩展名常量&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestFileExtensions.test_excel_extensions">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestFileExtensions.test_excel_extensions">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_excel_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试 Excel 文件扩展名&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">EXCEL_EXTENSIONS</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;.xls&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">EXCEL_EXTENSIONS</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">EXCEL_EXTENSIONS</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+        <span class="k">assert</span> <span class="s1">&#39;.xlsx&#39;</span> <span class="ow">in</span> <span class="n">EXCEL_EXTENSIONS</span>
+        <span class="k">assert</span> <span class="s1">&#39;.xls&#39;</span> <span class="ow">in</span> <span class="n">EXCEL_EXTENSIONS</span></div>
+
+
+<div class="viewcode-block" id="TestFileExtensions.test_engine_extensions">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestFileExtensions.test_engine_extensions">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;extension,expected_value&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">RENPY_EXTENSION</span><span class="p">,</span> <span class="s1">&#39;.rpy&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">NANINOVEL_EXTENSION</span><span class="p">,</span> <span class="s1">&#39;.nani&#39;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_engine_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="n">expected_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试引擎文件扩展名&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">extension</span> <span class="o">==</span> <span class="n">expected_value</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestTempFilePrefix">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestTempFilePrefix">[文档]</a>
+<span class="k">class</span> <span class="nc">TestTempFilePrefix</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试临时文件前缀&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestTempFilePrefix.test_temp_file_prefix">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestTempFilePrefix.test_temp_file_prefix">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_temp_file_prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试临时文件前缀&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">TEMP_FILE_PREFIX</span> <span class="o">==</span> <span class="s1">&#39;~&#39;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">TEMP_FILE_PREFIX</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">TEMP_FILE_PREFIX</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEnumComparison">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumComparison">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEnumComparison</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试枚举比较功能&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEnumComparison.test_enum_equality">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumComparison.test_enum_equality">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;enum1,enum2,should_equal&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="c1"># 相等比较</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">,</span> <span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="c1"># 不相等比较</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">HIDE</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">,</span> <span class="n">FileType</span><span class="o">.</span><span class="n">SOUND</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_enum_equality</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enum1</span><span class="p">,</span> <span class="n">enum2</span><span class="p">,</span> <span class="n">should_equal</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试枚举相等性比较&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">should_equal</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">enum1</span> <span class="o">==</span> <span class="n">enum2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">enum1</span> <span class="o">!=</span> <span class="n">enum2</span></div>
+
+
+<div class="viewcode-block" id="TestEnumComparison.test_enum_string_comparison">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumComparison.test_enum_string_comparison">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;enum_member,string_value&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="s2">&quot;显示&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">SpecialSpeaker</span><span class="o">.</span><span class="n">RENPY_COMMAND</span><span class="p">,</span> <span class="s2">&quot;renpy&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">,</span> <span class="s2">&quot;Music&quot;</span><span class="p">),</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_enum_string_comparison</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enum_member</span><span class="p">,</span> <span class="n">string_value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试枚举与字符串比较&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">enum_member</span> <span class="o">==</span> <span class="n">string_value</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEnumIteration">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumIteration">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEnumIteration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试枚举迭代功能&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEnumIteration.test_enum_iteration">
+<a class="viewcode-back" href="../../../tests.core.html#tests.core.test_constants.TestEnumIteration.test_enum_iteration">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">parametrize</span><span class="p">(</span><span class="s2">&quot;enum_class,expected_members,expected_count&quot;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="p">(</span><span class="n">WindowMode</span><span class="p">,</span> <span class="p">[</span><span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW</span><span class="p">,</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">HIDE</span><span class="p">,</span> <span class="n">WindowMode</span><span class="o">.</span><span class="n">SHOW_AND_HIDE</span><span class="p">],</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="p">(</span><span class="n">FileType</span><span class="p">,</span> <span class="p">[</span><span class="n">FileType</span><span class="o">.</span><span class="n">BACKGROUND</span><span class="p">,</span> <span class="n">FileType</span><span class="o">.</span><span class="n">MUSIC</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>  <span class="c1"># 只检查部分成员</span>
+        <span class="p">(</span><span class="n">ColumnName</span><span class="p">,</span> <span class="p">[</span><span class="n">ColumnName</span><span class="o">.</span><span class="n">NOTE</span><span class="p">,</span> <span class="n">ColumnName</span><span class="o">.</span><span class="n">SPEAKER</span><span class="p">],</span> <span class="mi">6</span><span class="p">),</span>  <span class="c1"># 只检查部分成员</span>
+    <span class="p">])</span>
+    <span class="k">def</span> <span class="nf">test_enum_iteration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enum_class</span><span class="p">,</span> <span class="n">expected_members</span><span class="p">,</span> <span class="n">expected_count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试枚举迭代功能&quot;&quot;&quot;</span>
+        <span class="n">members</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">enum_class</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">members</span><span class="p">)</span> <span class="o">==</span> <span class="n">expected_count</span>
+        <span class="k">for</span> <span class="n">expected_member</span> <span class="ow">in</span> <span class="n">expected_members</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">expected_member</span> <span class="ow">in</span> <span class="n">members</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

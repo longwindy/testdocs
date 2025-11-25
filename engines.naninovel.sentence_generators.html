@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>engines.naninovel.sentence_generators package &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=34969b80"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=beaddf03"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="engines.renpy package" href="engines.renpy.html" />
+    <link rel="prev" title="engines.naninovel package" href="engines.naninovel.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">scenario_tool</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">core package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="engines.html">engines package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="engines.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="engines.naninovel.html">engines.naninovel package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="engines.renpy.html">engines.renpy package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="engines.html#module-engines">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="generate_scenario.html">generate_scenario module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="generate_test_data.html">generate_test_data module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gui.html">gui package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_gui.html">run_gui module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sync_resources.html">sync_resources module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tests.html">tests package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update_param.html">update_param module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validate_resources.html">validate_resources module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">scenario_tool</a></li>
+          <li class="breadcrumb-item"><a href="engines.html">engines package</a></li>
+          <li class="breadcrumb-item"><a href="engines.naninovel.html">engines.naninovel package</a></li>
+      <li class="breadcrumb-item active">engines.naninovel.sentence_generators package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/engines.naninovel.sentence_generators.rst.txt" rel="nofollow"> 查看页面源码</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="engines-naninovel-sentence-generators-package">
+<h1>engines.naninovel.sentence_generators package<a class="headerlink" href="#engines-naninovel-sentence-generators-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-engines.naninovel.sentence_generators.audio_generator">
+<span id="engines-naninovel-sentence-generators-audio-generator-module"></span><h2>engines.naninovel.sentence_generators.audio_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.audio_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Audio Generator
+生成音频相关命令（音乐、音效、语音）</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.audio_generator.AudioGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.audio_generator.</span></span><span class="sig-name descname"><span class="pre">AudioGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/audio_generator.html#AudioGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.audio_generator.AudioGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>音频生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.audio_generator.AudioGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.audio_generator.AudioGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Ambience':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;sfx</span> <span class="pre">SFX/{value}</span> <span class="pre">loop:True',</span> <span class="pre">'format_stop':</span> <span class="pre">'&#64;stopSound</span> <span class="pre">wait:False',</span> <span class="pre">'translate_type':</span> <span class="pre">'Ambience'},</span> <span class="pre">'AudioFade':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">fade:{value}'},</span> <span class="pre">'Music':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;bgm</span> <span class="pre">Music/{value}',</span> <span class="pre">'format_stop':</span> <span class="pre">'&#64;stopBgm</span> <span class="pre">wait:False',</span> <span class="pre">'translate_type':</span> <span class="pre">'Music'},</span> <span class="pre">'Sound':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;sfx</span> <span class="pre">SFX/{value}',</span> <span class="pre">'format_stop':</span> <span class="pre">'&#64;stopSound</span> <span class="pre">wait:False',</span> <span class="pre">'translate_type':</span> <span class="pre">'Sound'},</span> <span class="pre">'Volume':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">volume:{value}'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.audio_generator.AudioGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.audio_generator.AudioGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/audio_generator.html#AudioGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.audio_generator.AudioGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理音频参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的音频命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.background_generator">
+<span id="engines-naninovel-sentence-generators-background-generator-module"></span><h2>engines.naninovel.sentence_generators.background_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.background_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Background Generator
+生成背景相关命令</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.background_generator.BackgroundGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.background_generator.</span></span><span class="sig-name descname"><span class="pre">BackgroundGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/background_generator.html#BackgroundGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>背景生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Back':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Background'},</span> <span class="pre">'BackAnim':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Background'},</span> <span class="pre">'BackAnimParam':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Animation'},</span> <span class="pre">'BackID':</span> <span class="pre">{'default':</span> <span class="pre">'MainBackground',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">id:{value}',</span> <span class="pre">'translate_type':</span> <span class="pre">'Id'},</span> <span class="pre">'BackPos':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">pos:{value}'},</span> <span class="pre">'BackScale':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">sacle:{value}'},</span> <span class="pre">'BackTime':</span> <span class="pre">{'default':</span> <span class="pre">'1.0',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">time:{value}'},</span> <span class="pre">'BackTint':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">tint:{value}'},</span> <span class="pre">'BackVisible':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">visible:{value}'},</span> <span class="pre">'BackWait':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">wait:{value}'},</span> <span class="pre">'Dissolve':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">dissolve:{value}',</span> <span class="pre">'translate_type':</span> <span class="pre">'Dissolve'},</span> <span class="pre">'DissolveParam':</span> <span class="pre">{'default':</span> <span class="pre">'90',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">params:{value}'},</span> <span class="pre">'Event':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Event'},</span> <span class="pre">'TransBack':</span> <span class="pre">{'translate_type':</span> <span class="pre">'TransitionType'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/background_generator.html#BackgroundGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.background_generator.BackgroundGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理背景参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的背景命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.camera_generator">
+<span id="engines-naninovel-sentence-generators-camera-generator-module"></span><h2>engines.naninovel.sentence_generators.camera_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.camera_generator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.camera_generator.CameraGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.camera_generator.</span></span><span class="sig-name descname"><span class="pre">CameraGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/camera_generator.html#CameraGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.camera_generator.CameraGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.camera_generator.CameraGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.camera_generator.CameraGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Camera':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Camera'},</span> <span class="pre">'CameraTime':</span> <span class="pre">{'default':</span> <span class="pre">'0',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">time:{value}'},</span> <span class="pre">'CameraWait':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">wait:{value}'},</span> <span class="pre">'OffsetX':</span> <span class="pre">{'default':</span> <span class="pre">'0',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">offset:{value}'},</span> <span class="pre">'OffsetY':</span> <span class="pre">{'default':</span> <span class="pre">'0',</span> <span class="pre">'format':</span> <span class="pre">',{value}'},</span> <span class="pre">'Zoom':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">zoom:{value}'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.camera_generator.CameraGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.camera_generator.CameraGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/camera_generator.html#CameraGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.camera_generator.CameraGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理镜头参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的镜头命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.character_generator">
+<span id="engines-naninovel-sentence-generators-character-generator-module"></span><h2>engines.naninovel.sentence_generators.character_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.character_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Character Generator
+生成角色相关命令</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.character_generator.CharacterGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.character_generator.</span></span><span class="sig-name descname"><span class="pre">CharacterGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/character_generator.html#CharacterGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.character_generator.CharacterGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>角色生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.character_generator.CharacterGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.character_generator.CharacterGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Char':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Character'},</span> <span class="pre">'CharAnim':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Character'},</span> <span class="pre">'CharAnimParam':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Animation'},</span> <span class="pre">'CharAnimWait':</span> <span class="pre">{},</span> <span class="pre">'Pose':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">pose:{value}',</span> <span class="pre">'translate_type':</span> <span class="pre">'Pose'},</span> <span class="pre">'Position':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">position:{value}'},</span> <span class="pre">'Scale':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">scale:{value}'},</span> <span class="pre">'Time':</span> <span class="pre">{'default':</span> <span class="pre">'0.5',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">time:{value}'},</span> <span class="pre">'Tint':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">tint:{value}',</span> <span class="pre">'translate_type':</span> <span class="pre">'Tint'},</span> <span class="pre">'TransChar':</span> <span class="pre">{'category':</span> <span class="pre">'Character'},</span> <span class="pre">'Varient':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Varient'},</span> <span class="pre">'Visible':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">visible:{value}'},</span> <span class="pre">'Wait':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">wait:true'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.character_generator.CharacterGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.character_generator.CharacterGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/character_generator.html#CharacterGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.character_generator.CharacterGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理角色参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的角色命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.effect_generator">
+<span id="engines-naninovel-sentence-generators-effect-generator-module"></span><h2>engines.naninovel.sentence_generators.effect_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.effect_generator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.effect_generator.EffectGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.effect_generator.</span></span><span class="sig-name descname"><span class="pre">EffectGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/effect_generator.html#EffectGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.effect_generator.EffectGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.effect_generator.EffectGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.effect_generator.EffectGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Effect':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Effect'},</span> <span class="pre">'EffectAtr1':</span> <span class="pre">{},</span> <span class="pre">'EffectAtr2':</span> <span class="pre">{},</span> <span class="pre">'EffectId':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Id'},</span> <span class="pre">'EffectTime':</span> <span class="pre">{'default':</span> <span class="pre">'1',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">time:{value}'},</span> <span class="pre">'EffectWait':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">wait:{value}'},</span> <span class="pre">'PackedEffect':</span> <span class="pre">{'translate_type':</span> <span class="pre">'PackedEffect'},</span> <span class="pre">'Power':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">power:{value}'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.effect_generator.EffectGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.effect_generator.EffectGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/effect_generator.html#EffectGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.effect_generator.EffectGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理参数并生成命令（管道模式）</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的命令列表，如果无法处理则返回 None</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[List[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.movie_generator">
+<span id="engines-naninovel-sentence-generators-movie-generator-module"></span><h2>engines.naninovel.sentence_generators.movie_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.movie_generator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.movie_generator.MovieGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.movie_generator.</span></span><span class="sig-name descname"><span class="pre">MovieGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/movie_generator.html#MovieGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.movie_generator.MovieGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>视频生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.movie_generator.MovieGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.movie_generator.MovieGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Moive':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;movie</span> <span class="pre">{value}</span> <span class="pre">wait:true',</span> <span class="pre">'translate_type':</span> <span class="pre">'Movie'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.movie_generator.MovieGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.movie_generator.MovieGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/movie_generator.html#MovieGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.movie_generator.MovieGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理视频参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的视频播放命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.note_generator">
+<span id="engines-naninovel-sentence-generators-note-generator-module"></span><h2>engines.naninovel.sentence_generators.note_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.note_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Note Generator
+生成注释命令</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.note_generator.NoteGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.note_generator.</span></span><span class="sig-name descname"><span class="pre">NoteGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/note_generator.html#NoteGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.note_generator.NoteGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>注释生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.note_generator.NoteGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.note_generator.NoteGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.note_generator.NoteGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Note':</span> <span class="pre">{}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.note_generator.NoteGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.note_generator.NoteGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.note_generator.NoteGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.note_generator.NoteGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/note_generator.html#NoteGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.note_generator.NoteGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理注释参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的注释命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.pause_wait_generator">
+<span id="engines-naninovel-sentence-generators-pause-wait-generator-module"></span><h2>engines.naninovel.sentence_generators.pause_wait_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.pause_wait_generator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.pause_wait_generator.</span></span><span class="sig-name descname"><span class="pre">PauseWaitGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/pause_wait_generator.html#PauseWaitGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>等待时间生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'PauseWait':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;wait</span> <span class="pre">{value}'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/pause_wait_generator.html#PauseWaitGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.pause_wait_generator.PauseWaitGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理等待参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的注释命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.text_generator">
+<span id="engines-naninovel-sentence-generators-text-generator-module"></span><h2>engines.naninovel.sentence_generators.text_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.text_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Text Generator
+生成文本和对话命令</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.text_generator.TextGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.text_generator.</span></span><span class="sig-name descname"><span class="pre">TextGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/text_generator.html#TextGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.text_generator.TextGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>文本生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.text_generator.TextGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.text_generator.TextGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.text_generator.TextGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Printer':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Printer'},</span> <span class="pre">'PrinterPos':</span> <span class="pre">{},</span> <span class="pre">'Speaker':</span> <span class="pre">{'translate_type':</span> <span class="pre">'Speaker'},</span> <span class="pre">'Text':</span> <span class="pre">{}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.text_generator.TextGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.text_generator.TextGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.text_generator.TextGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.text_generator.TextGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/text_generator.html#TextGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.text_generator.TextGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理文本参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的文本命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.transition_generator">
+<span id="engines-naninovel-sentence-generators-transition-generator-module"></span><h2>engines.naninovel.sentence_generators.transition_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.transition_generator" title="Link to this heading"></a></h2>
+<p>Naninovel Transition Generator
+生成转场命令</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.transition_generator.TransitionGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.transition_generator.</span></span><span class="sig-name descname"><span class="pre">TransitionGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/transition_generator.html#TransitionGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<p>转场生成器</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Transition':</span> <span class="pre">{'format':</span> <span class="pre">'</span>&#160;&#160;&#160; <span class="pre">&#64;back</span> <span class="pre">{value}</span> <span class="pre">id:转场',</span> <span class="pre">'translate_type':</span> <span class="pre">'Transition'},</span> <span class="pre">'TransitionDissolve':</span> <span class="pre">{'format':</span> <span class="pre">'</span> <span class="pre">Custom</span> <span class="pre">dissolve:Rule/{value}</span> <span class="pre">params:95'},</span> <span class="pre">'TransitionTime':</span> <span class="pre">{'default':</span> <span class="pre">'1.0',</span> <span class="pre">'format':</span> <span class="pre">'</span> <span class="pre">time:{value}'},</span> <span class="pre">'TransitionWaitPause':</span> <span class="pre">{'default':</span> <span class="pre">'i1',</span> <span class="pre">'format':</span> <span class="pre">'&#64;wait</span> <span class="pre">{value}'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/transition_generator.html#TransitionGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.transition_generator.TransitionGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理转场参数</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的转场命令</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators.voice_generator">
+<span id="engines-naninovel-sentence-generators-voice-generator-module"></span><h2>engines.naninovel.sentence_generators.voice_generator module<a class="headerlink" href="#module-engines.naninovel.sentence_generators.voice_generator" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.voice_generator.VoiceGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">engines.naninovel.sentence_generators.voice_generator.</span></span><span class="sig-name descname"><span class="pre">VoiceGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">translator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.param_translator.ParamTranslator" title="core.param_translator.ParamTranslator"><span class="pre">ParamTranslator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">engine_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="core.html#core.config_manager.EngineConfig" title="core.config_manager.EngineConfig"><span class="pre">EngineConfig</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/voice_generator.html#VoiceGenerator"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator" title="Link to this definition"></a></dt>
+<dd><p>基类：<a class="reference internal" href="core.html#core.base_sentence_generator.BaseSentenceGenerator" title="core.base_sentence_generator.BaseSentenceGenerator"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSentenceGenerator</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.category">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">category</span></span><a class="headerlink" href="#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.category" title="Link to this definition"></a></dt>
+<dd><p>返回生成器处理的句子类型</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>类型名称</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.param_config">
+<span class="sig-name descname"><span class="pre">param_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'Voice':</span> <span class="pre">{'format':</span> <span class="pre">'&#64;voice</span> <span class="pre">{value}',</span> <span class="pre">'format_stop':</span> <span class="pre">'&#64;stopVoice'}}</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.param_config" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.priority">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">priority</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.priority" title="Link to this definition"></a></dt>
+<dd><p>生成器执行优先级</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回<span class="colon">:</span></dt>
+<dd class="field-odd"><p>优先级数字，越小越先执行</p>
+</dd>
+<dt class="field-even">返回类型<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.process">
+<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/engines/naninovel/sentence_generators/voice_generator.html#VoiceGenerator.process"><span class="viewcode-link"><span class="pre">[源代码]</span></span></a><a class="headerlink" href="#engines.naninovel.sentence_generators.voice_generator.VoiceGenerator.process" title="Link to this definition"></a></dt>
+<dd><p>处理参数并生成命令（管道模式）</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> -- 参数字典</p>
+</dd>
+<dt class="field-even">返回<span class="colon">:</span></dt>
+<dd class="field-even"><p>生成的命令列表，如果无法处理则返回 None</p>
+</dd>
+<dt class="field-odd">返回类型<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Optional[List[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-engines.naninovel.sentence_generators">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-engines.naninovel.sentence_generators" title="Link to this heading"></a></h2>
+<p>Naninovel Sentence Generators
+Naninovel 引擎的句子生成器</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="页脚">
+        <a href="engines.naninovel.html" class="btn btn-neutral float-left" title="engines.naninovel package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> 上一页</a>
+        <a href="engines.renpy.html" class="btn btn-neutral float-right" title="engines.renpy package" accesskey="n" rel="next">下一页 <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

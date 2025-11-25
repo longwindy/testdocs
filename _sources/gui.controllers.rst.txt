@@ -1,0 +1,37 @@
+gui.controllers package
+=======================
+
+Submodules
+----------
+
+gui.controllers.param\_controller module
+----------------------------------------
+
+.. automodule:: gui.controllers.param_controller
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+gui.controllers.resource\_controller module
+-------------------------------------------
+
+.. automodule:: gui.controllers.resource_controller
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+gui.controllers.scenario\_controller module
+-------------------------------------------
+
+.. automodule:: gui.controllers.scenario_controller
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: gui.controllers
+   :members:
+   :show-inheritance:
+   :undoc-members:

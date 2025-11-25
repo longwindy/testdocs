@@ -1,0 +1,1120 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh-CN" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_param_updater &mdash; scenario_tool 0.0.7 文档</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=34969b80"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=beaddf03"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="索引" href="../../genindex.html" />
+    <link rel="search" title="搜索" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            scenario_tool
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="搜索文档" aria-label="搜索文档" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="导航菜单">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">scenario_tool</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="移动版导航菜单" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">scenario_tool</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="页面导航">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">模块代码</a></li>
+      <li class="breadcrumb-item active">tests.test_param_updater</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>tests.test_param_updater 源代码</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">测试 ParamUpdater 类</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">unittest.mock</span> <span class="kn">import</span> <span class="n">Mock</span><span class="p">,</span> <span class="n">patch</span>
+<span class="kn">from</span> <span class="nn">update_param</span> <span class="kn">import</span> <span class="n">ParamUpdater</span>
+<span class="kn">from</span> <span class="nn">core.config_manager</span> <span class="kn">import</span> <span class="n">AppConfig</span>
+
+
+<div class="viewcode-block" id="TestParamUpdater">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater">[文档]</a>
+<span class="k">class</span> <span class="nc">TestParamUpdater</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 ParamUpdater 类&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestParamUpdater.mock_config">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟的配置对象&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">AppConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span>
+
+        <span class="c1"># 创建必要的目录</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.mock_param_excel">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.mock_param_excel">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_param_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟的参数 Excel 文件&quot;&quot;&quot;</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="n">param_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># 创建多个工作表</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="c1"># Music 工作表</span>
+            <span class="n">df_music</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">,</span> <span class="s1">&#39;背景音乐&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">,</span> <span class="s1">&#39;music2&#39;</span><span class="p">,</span> <span class="s1">&#39;bgm_main&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_music</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Speaker 工作表</span>
+            <span class="n">df_speaker</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="s1">&#39;角色B&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;character_a&#39;</span><span class="p">,</span> <span class="s1">&#39;character_b&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_speaker</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Speaker&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Background 工作表</span>
+            <span class="n">df_bg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;背景1&#39;</span><span class="p">,</span> <span class="s1">&#39;背景2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;bg_1&#39;</span><span class="p">,</span> <span class="s1">&#39;bg_2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_bg</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Background&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># Varient 工作表</span>
+            <span class="n">df_varient</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;差分1&#39;</span><span class="p">,</span> <span class="s1">&#39;差分2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;variant_1&#39;</span><span class="p">,</span> <span class="s1">&#39;variant_2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_varient</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Varient&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">param_file</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.mock_varient_excel">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.mock_varient_excel">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_varient_excel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟的差分参数 Excel 文件&quot;&quot;&quot;</span>
+        <span class="n">varient_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span> <span class="o">/</span> <span class="s2">&quot;varient_data.xlsx&quot;</span>
+
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">varient_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="c1"># 角色A 工作表</span>
+            <span class="n">df_role_a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;开心&#39;</span><span class="p">,</span> <span class="s1">&#39;难过&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;happy&#39;</span><span class="p">,</span> <span class="s1">&#39;sad&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_role_a</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># 角色B 工作表</span>
+            <span class="n">df_role_b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;生气&#39;</span><span class="p">,</span> <span class="s1">&#39;惊讶&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;angry&#39;</span><span class="p">,</span> <span class="s1">&#39;surprised&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_role_b</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;角色B&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># 模板工作表（应该被处理但可能是空的）</span>
+            <span class="n">df_template</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[]</span>
+            <span class="p">})</span>
+            <span class="n">df_template</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;参数表模板&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">varient_file</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.updater">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.updater">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">updater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建 ParamUpdater 实例&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ParamUpdater</span><span class="p">(</span><span class="n">mock_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_init">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_init">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试初始化&quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span> <span class="o">==</span> <span class="n">mock_config</span>
+        <span class="k">assert</span> <span class="n">updater</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">==</span> <span class="s2">&quot;renpy&quot;</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_read_param_file_success">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_success">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_read_param_file_success</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">mock_param_excel</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试成功读取参数文件&quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">mock_param_excel</span><span class="p">)</span>
+
+        <span class="c1"># 验证读取到的映射</span>
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+        <span class="k">assert</span> <span class="s1">&#39;Speaker&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+        <span class="k">assert</span> <span class="s1">&#39;Background&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+        <span class="k">assert</span> <span class="s1">&#39;Varient&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+
+        <span class="c1"># 验证映射内容</span>
+        <span class="k">assert</span> <span class="n">mappings</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">][</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;music1&#39;</span>
+        <span class="k">assert</span> <span class="n">mappings</span><span class="p">[</span><span class="s1">&#39;Speaker&#39;</span><span class="p">][</span><span class="s1">&#39;角色A&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;character_a&#39;</span>
+        <span class="k">assert</span> <span class="n">mappings</span><span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">][</span><span class="s1">&#39;背景1&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;bg_1&#39;</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_read_param_file_not_exist">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_not_exist">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_read_param_file_not_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试读取不存在的文件&quot;&quot;&quot;</span>
+        <span class="n">non_existent</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent.xlsx&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">non_existent</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">mappings</span> <span class="o">==</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_read_param_file_skip_template">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_skip_template">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_read_param_file_skip_template</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试跳过模板工作表&quot;&quot;&quot;</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;test_param.xlsx&quot;</span>
+
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="c1"># 正常工作表</span>
+            <span class="n">df_normal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;参数1&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_normal</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Normal&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># 模板工作表</span>
+            <span class="n">df_template</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;模板参数&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;template_param&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_template</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;参数表模板&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># skip_template=True 时应该跳过模板</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">skip_template</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;Normal&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+        <span class="k">assert</span> <span class="s1">&#39;参数表模板&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mappings</span>
+
+        <span class="c1"># skip_template=False 时应该包含模板</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">skip_template</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;Normal&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+        <span class="k">assert</span> <span class="s1">&#39;参数表模板&#39;</span> <span class="ow">in</span> <span class="n">mappings</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_read_param_file_missing_columns">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_read_param_file_missing_columns">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_read_param_file_missing_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试缺少必需列的工作表&quot;&quot;&quot;</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;test_param.xlsx&quot;</span>
+
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="c1"># 缺少 ScenarioParam 列</span>
+            <span class="n">df_missing</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;参数1&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;WrongColumn&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;wrong&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_missing</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;MissingColumn&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">param_file</span><span class="p">)</span>
+
+        <span class="c1"># 应该跳过缺少必需列的工作表</span>
+        <span class="k">assert</span> <span class="s1">&#39;MissingColumn&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mappings</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_collect_validation_data">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">mock_param_excel</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试收集验证数据&quot;&quot;&quot;</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">mock_param_excel</span><span class="p">)</span>
+
+        <span class="c1"># 验证收集到的数据</span>
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+        <span class="k">assert</span> <span class="s1">&#39;Speaker&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+        <span class="k">assert</span> <span class="s1">&#39;Background&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+        <span class="k">assert</span> <span class="s1">&#39;Varient&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+
+        <span class="c1"># 验证数据内容</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐1&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐2&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;角色A&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Speaker&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;背景1&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Background&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_collect_validation_data_with_varient">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_with_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_with_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">mock_param_excel</span><span class="p">,</span> <span class="n">mock_varient_excel</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试收集验证数据（包含差分参数）&quot;&quot;&quot;</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">mock_param_excel</span><span class="p">,</span> <span class="n">mock_varient_excel</span><span class="p">)</span>
+
+        <span class="c1"># 验证差分参数被合并到 Varient 列</span>
+        <span class="k">assert</span> <span class="s1">&#39;Varient&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+
+        <span class="c1"># 应该包含基础差分参数</span>
+        <span class="k">assert</span> <span class="s1">&#39;差分1&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;差分2&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+
+        <span class="c1"># 应该包含角色特定的差分参数</span>
+        <span class="k">assert</span> <span class="s1">&#39;开心&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;难过&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;生气&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;惊讶&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+
+        <span class="c1"># 验证去重和排序</span>
+        <span class="n">varient_list</span> <span class="o">=</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">varient_list</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">varient_list</span><span class="p">))</span>  <span class="c1"># 无重复</span>
+        <span class="k">assert</span> <span class="n">varient_list</span> <span class="o">==</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">varient_list</span><span class="p">)</span>  <span class="c1"># 已排序</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_collect_validation_data_file_not_exist">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_file_not_exist">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_file_not_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试文件不存在时的行为&quot;&quot;&quot;</span>
+        <span class="n">non_existent</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent.xlsx&quot;</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">non_existent</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="n">validation_data</span> <span class="o">==</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_collect_validation_data_empty_values">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_collect_validation_data_empty_values">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_empty_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理空值和空字符串&quot;&quot;&quot;</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;test_param.xlsx&quot;</span>
+
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;参数1&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;  &#39;</span><span class="p">,</span> <span class="s1">&#39;参数2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;param1&#39;</span><span class="p">,</span> <span class="s1">&#39;empty&#39;</span><span class="p">,</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="s1">&#39;spaces&#39;</span><span class="p">,</span> <span class="s1">&#39;param2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">param_file</span><span class="p">)</span>
+
+        <span class="c1"># 应该只包含非空的参数</span>
+        <span class="k">assert</span> <span class="s1">&#39;Test&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+        <span class="k">assert</span> <span class="s1">&#39;参数1&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Test&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;参数2&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Test&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Test&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;  &#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Test&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_generate_mappings_file">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_generate_mappings_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成映射文件&quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;音乐1&#39;</span><span class="p">:</span> <span class="s1">&#39;music1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">:</span> <span class="s1">&#39;music2&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;Speaker&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;角色A&#39;</span><span class="p">:</span> <span class="s1">&#39;character_a&#39;</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证文件被创建</span>
+        <span class="k">assert</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 验证文件内容</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">output_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;PARAM_MAPPINGS&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;Speaker&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;music1&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;character_a&#39;</span> <span class="ow">in</span> <span class="n">content</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_generate_mappings_file_varient">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_generate_mappings_file_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_generate_mappings_file_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成差分映射文件&quot;&quot;&quot;</span>
+        <span class="n">varient_mappings</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;角色A&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;开心&#39;</span><span class="p">:</span> <span class="s1">&#39;happy&#39;</span><span class="p">},</span>
+            <span class="s1">&#39;角色B&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;生气&#39;</span><span class="p">:</span> <span class="s1">&#39;angry&#39;</span><span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;varient_mappings.py&quot;</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">varient_mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证文件被创建</span>
+        <span class="k">assert</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 验证文件内容</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">output_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;VARIENT_MAPPINGS&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;角色A&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;happy&#39;</span> <span class="ow">in</span> <span class="n">content</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_no_validation_data">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_validation_data">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_no_validation_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试没有验证数据时的行为&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">({})</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_input_dir_not_exist">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_input_dir_not_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试输入目录不存在时的行为&quot;&quot;&quot;</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent&quot;</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_no_excel_files">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_excel_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_no_excel_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试没有 Excel 文件时的行为&quot;&quot;&quot;</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="c1"># 没有文件时应该返回 True（不算错误）</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_param_sheet">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_with_param_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试更新包含参数表的 Excel 文件&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+
+        <span class="c1"># 创建一个包含&quot;参数表&quot;的 Excel 文件</span>
+        <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;test_scenario.xlsx&quot;</span>
+
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+
+        <span class="c1"># 添加表头和旧数据</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Speaker&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;旧音乐1&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;旧音乐2&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;旧角色A&#39;</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># 准备新的验证数据</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐3&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;Speaker&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="s1">&#39;角色B&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 执行更新</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+
+        <span class="c1"># 验证结果</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="c1"># 验证文件已更新</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">load_workbook</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">load_workbook</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="p">[</span><span class="s1">&#39;参数表&#39;</span><span class="p">]</span>
+
+        <span class="c1"># 验证 Music 列已更新</span>
+        <span class="n">music_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">music_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">music_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐1&#39;</span> <span class="ow">in</span> <span class="n">music_values</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐3&#39;</span> <span class="ow">in</span> <span class="n">music_values</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_without_param_sheet">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_without_param_sheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试处理没有参数表的 Excel 文件&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个没有&quot;参数表&quot;的 Excel 文件</span>
+        <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;no_param_sheet.xlsx&quot;</span>
+
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">excel_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet1&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]}</span>
+
+        <span class="c1"># 应该跳过这个文件，但不报错</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span>  <span class="c1"># 没有成功更新任何文件</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_skip_temp_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_skip_temp_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试跳过临时文件（以 ~ 开头）&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+
+        <span class="c1"># 创建临时文件</span>
+        <span class="n">temp_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;~temp.xlsx&quot;</span>
+
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">temp_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]}</span>
+
+        <span class="c1"># 应该跳过临时文件</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>  <span class="c1"># 没有找到非临时文件，返回 True</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_no_changes_needed">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_no_changes_needed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试当参数表已经是最新时的行为&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+
+        <span class="c1"># 创建一个已经包含正确数据的 Excel 文件</span>
+        <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;up_to_date.xlsx&quot;</span>
+
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+
+        <span class="c1"># 添加表头和数据（与验证数据相同）</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Speaker&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;音乐1&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;音乐2&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;角色A&#39;</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c1"># 使用相同的数据</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;Speaker&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;角色A&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 执行更新</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+
+        <span class="c1"># 应该检测到需要创建命名区域，所以返回 True</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_with_named_ranges">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_with_named_ranges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试创建命名区域&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span><span class="p">,</span> <span class="n">load_workbook</span>
+
+        <span class="c1"># 创建 Excel 文件</span>
+        <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;with_ranges.xlsx&quot;</span>
+
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Speaker&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;音乐1&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;B2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;角色A&#39;</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;Speaker&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="s1">&#39;角色B&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 执行更新</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="c1"># 验证命名区域已创建</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">load_workbook</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+
+        <span class="c1"># 检查 MusicList 命名区域</span>
+        <span class="k">assert</span> <span class="s1">&#39;MusicList&#39;</span> <span class="ow">in</span> <span class="n">wb</span><span class="o">.</span><span class="n">defined_names</span>
+        <span class="n">music_range</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">defined_names</span><span class="p">[</span><span class="s1">&#39;MusicList&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;OFFSET&#39;</span> <span class="ow">in</span> <span class="n">music_range</span><span class="o">.</span><span class="n">attr_text</span>
+        <span class="k">assert</span> <span class="s1">&#39;COUNTA&#39;</span> <span class="ow">in</span> <span class="n">music_range</span><span class="o">.</span><span class="n">attr_text</span>
+
+        <span class="c1"># 检查 SpeakerList 命名区域</span>
+        <span class="k">assert</span> <span class="s1">&#39;SpeakerList&#39;</span> <span class="ow">in</span> <span class="n">wb</span><span class="o">.</span><span class="n">defined_names</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdater.test_update_scenario_param_sheets_multiple_files">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdater.test_update_scenario_param_sheets_multiple_files">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_multiple_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试同时处理多个 Excel 文件&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span><span class="p">,</span> <span class="n">load_workbook</span>
+
+        <span class="c1"># 创建多个 Excel 文件</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;scenario_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.xlsx&quot;</span>
+
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+            <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+            <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+            <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+            <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;旧音乐&#39;</span>
+
+            <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+            <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># 执行更新</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="c1"># 验证所有文件都已更新</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+            <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;scenario_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.xlsx&quot;</span>
+            <span class="n">wb</span> <span class="o">=</span> <span class="n">load_workbook</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+            <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="p">[</span><span class="s1">&#39;参数表&#39;</span><span class="p">]</span>
+
+            <span class="c1"># 验证数据已更新</span>
+            <span class="n">music_col_values</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">ws</span><span class="o">.</span><span class="n">max_row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">ws</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">music_col_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">music_col_values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="k">assert</span> <span class="s1">&#39;音乐1&#39;</span> <span class="ow">in</span> <span class="n">music_col_values</span>
+            <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestParamUpdaterIntegration">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdaterIntegration">[文档]</a>
+<span class="k">class</span> <span class="nc">TestParamUpdaterIntegration</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;集成测试：测试完整的参数更新流程&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestParamUpdaterIntegration.full_setup">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdaterIntegration.full_setup">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">full_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建完整的测试环境&quot;&quot;&quot;</span>
+        <span class="c1"># 创建配置</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">AppConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span>
+
+        <span class="c1"># 创建目录</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># 创建参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df_music</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">,</span> <span class="s1">&#39;music2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_music</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">config</span><span class="p">,</span> <span class="n">param_file</span></div>
+
+
+<div class="viewcode-block" id="TestParamUpdaterIntegration.test_full_workflow">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestParamUpdaterIntegration.test_full_workflow">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_full_workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">full_setup</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试完整的工作流程&quot;&quot;&quot;</span>
+        <span class="n">config</span><span class="p">,</span> <span class="n">param_file</span> <span class="o">=</span> <span class="n">full_setup</span>
+        <span class="n">updater</span> <span class="o">=</span> <span class="n">ParamUpdater</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># 1. 读取参数文件</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">param_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">mappings</span>
+
+        <span class="c1"># 2. 生成映射文件</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+
+        <span class="c1"># 3. 收集验证数据</span>
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">param_file</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐1&#39;</span> <span class="ow">in</span> <span class="n">validation_data</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestExceptionHandling">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling">[文档]</a>
+<span class="k">class</span> <span class="nc">TestExceptionHandling</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试异常处理&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestExceptionHandling.mock_config">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">AppConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestExceptionHandling.updater">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.updater">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">updater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建更新器实例&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ParamUpdater</span><span class="p">(</span><span class="n">mock_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestExceptionHandling.test_read_param_file_with_exception">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.test_read_param_file_with_exception">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_read_param_file_with_exception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试读取参数文件时发生异常&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个损坏的 Excel 文件（实际上是文本文件）</span>
+        <span class="n">bad_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;bad.xlsx&quot;</span>
+        <span class="n">bad_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;This is not an Excel file&quot;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">read_param_file</span><span class="p">(</span><span class="n">bad_file</span><span class="p">)</span>
+
+        <span class="c1"># 应该返回空字典</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="TestExceptionHandling.test_generate_mappings_file_with_io_error">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.test_generate_mappings_file_with_io_error">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_generate_mappings_file_with_io_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成映射文件时发生 IO 错误&quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;音乐1&#39;</span><span class="p">:</span> <span class="s1">&#39;music1&#39;</span><span class="p">}}</span>
+
+        <span class="c1"># 使用一个不存在的目录（不创建）</span>
+        <span class="n">bad_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;nonexistent&quot;</span> <span class="o">/</span> <span class="s2">&quot;subdir&quot;</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">bad_dir</span> <span class="o">/</span> <span class="s2">&quot;mappings.py&quot;</span>
+
+        <span class="c1"># 应该捕获异常，不抛出</span>
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="c1"># 文件不应该被创建</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestExceptionHandling.test_collect_validation_data_with_read_error">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_read_error">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_with_read_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试收集验证数据时读取失败&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个损坏的文件</span>
+        <span class="n">bad_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;bad.xlsx&quot;</span>
+        <span class="n">bad_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;Not an Excel file&quot;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">bad_file</span><span class="p">)</span>
+
+        <span class="c1"># 应该返回空字典</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="o">==</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="TestExceptionHandling.test_collect_validation_data_with_varient_read_error">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestExceptionHandling.test_collect_validation_data_with_varient_read_error">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_with_varient_read_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试收集验证数据时差分文件读取失败&quot;&quot;&quot;</span>
+        <span class="c1"># 创建正常的参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># 创建损坏的差分文件</span>
+        <span class="n">varient_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;varient.xlsx&quot;</span>
+        <span class="n">varient_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;Not an Excel file&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 应该只返回基础参数，忽略差分文件错误</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">varient_file</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="s1">&#39;Music&#39;</span> <span class="ow">in</span> <span class="n">result</span>
+        <span class="k">assert</span> <span class="s1">&#39;音乐1&#39;</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Music&#39;</span><span class="p">]</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod">[文档]</a>
+<span class="k">class</span> <span class="nc">TestUpdateMappingsMethod</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试 update_mappings 方法&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.mock_config">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">AppConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.updater">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.updater">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">updater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建更新器实例&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ParamUpdater</span><span class="p">(</span><span class="n">mock_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_param_file_not_exist">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_mappings_param_file_not_exist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试参数文件不存在时的行为&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_mappings</span><span class="p">()</span>
+
+        <span class="c1"># 应该返回 False</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.test_update_mappings_success_without_varient">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_without_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_mappings_success_without_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试成功更新映射（没有差分文件）&quot;&quot;&quot;</span>
+        <span class="c1"># 创建参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">,</span> <span class="s1">&#39;music2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_mappings</span><span class="p">()</span>
+
+        <span class="c1"># 应该成功</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="c1"># 验证映射文件已创建</span>
+        <span class="n">mapping_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+        <span class="k">assert</span> <span class="n">mapping_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.test_update_mappings_success_with_varient">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_success_with_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_mappings_success_with_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试成功更新映射（有差分文件）&quot;&quot;&quot;</span>
+        <span class="c1"># 创建参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># 创建差分文件</span>
+        <span class="n">varient_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;varient_data.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">varient_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;开心&#39;</span><span class="p">,</span> <span class="s1">&#39;难过&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;happy&#39;</span><span class="p">,</span> <span class="s1">&#39;sad&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_mappings</span><span class="p">()</span>
+
+        <span class="c1"># 应该成功</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span>
+
+        <span class="c1"># 验证两个映射文件都已创建</span>
+        <span class="n">mapping_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+        <span class="n">varient_mapping_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;varient_mappings.py&quot;</span>
+        <span class="k">assert</span> <span class="n">mapping_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="n">varient_mapping_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.test_update_mappings_empty_mappings">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_empty_mappings">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_mappings_empty_mappings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试参数文件为空时的行为&quot;&quot;&quot;</span>
+        <span class="c1"># 创建一个空的参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;A&#39;</span><span class="p">:</span> <span class="p">[]})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Sheet1&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_mappings</span><span class="p">()</span>
+
+        <span class="c1"># 应该返回 False（没有读取到映射）</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestUpdateMappingsMethod.test_update_mappings_with_scenario_param_sheets">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_mappings_with_scenario_param_sheets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试更新映射并更新演出表格&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+
+        <span class="c1"># 创建参数文件</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">/</span> <span class="s2">&quot;param_data_renpy.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">,</span> <span class="s1">&#39;音乐2&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">,</span> <span class="s1">&#39;music2&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># 创建演出表格文件</span>
+        <span class="n">scenario_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;scenario.xlsx&quot;</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">scenario_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_mappings</span><span class="p">()</span>
+
+        <span class="c1"># 应该成功</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="TestEdgeCases">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases">[文档]</a>
+<span class="k">class</span> <span class="nc">TestEdgeCases</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;测试边界情况&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TestEdgeCases.mock_config">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.mock_config">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">mock_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建模拟配置&quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">(</span><span class="n">spec</span><span class="o">=</span><span class="n">AppConfig</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">engine_type</span> <span class="o">=</span> <span class="s2">&quot;renpy&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="n">Mock</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_config&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;input&quot;</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">param_config_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="TestEdgeCases.updater">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.updater">[文档]</a>
+    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
+    <span class="k">def</span> <span class="nf">updater</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mock_config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;创建更新器实例&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ParamUpdater</span><span class="p">(</span><span class="n">mock_config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.test_update_scenario_param_sheets_named_range_already_correct">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_update_scenario_param_sheets_named_range_already_correct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试命名区域已经正确时不更新&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">openpyxl</span> <span class="kn">import</span> <span class="n">Workbook</span>
+        <span class="kn">from</span> <span class="nn">openpyxl.workbook.defined_name</span> <span class="kn">import</span> <span class="n">DefinedName</span>
+
+        <span class="c1"># 创建 Excel 文件</span>
+        <span class="n">excel_file</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">input_dir</span> <span class="o">/</span> <span class="s2">&quot;test.xlsx&quot;</span>
+        <span class="n">wb</span> <span class="o">=</span> <span class="n">Workbook</span><span class="p">()</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">wb</span><span class="o">.</span><span class="n">active</span>
+        <span class="n">ws</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;参数表&quot;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Music&#39;</span>
+        <span class="n">ws</span><span class="p">[</span><span class="s1">&#39;A2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;音乐1&#39;</span>
+
+        <span class="c1"># 创建正确的命名区域</span>
+        <span class="n">correct_range</span> <span class="o">=</span> <span class="s2">&quot;OFFSET(参数表!$A$2,0,0,COUNTA(参数表!$A:$A)-1,1)&quot;</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">defined_names</span><span class="p">[</span><span class="s1">&#39;MusicList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">DefinedName</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;MusicList&#39;</span><span class="p">,</span>
+            <span class="n">attr_text</span><span class="o">=</span><span class="n">correct_range</span>
+        <span class="p">)</span>
+
+        <span class="n">wb</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">excel_file</span><span class="p">)</span>
+        <span class="n">wb</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">validation_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">]}</span>
+
+        <span class="c1"># 执行更新</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">update_scenario_param_sheets</span><span class="p">(</span><span class="n">validation_data</span><span class="p">)</span>
+
+        <span class="c1"># 应该返回 False（没有更新）</span>
+        <span class="k">assert</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="TestEdgeCases.test_collect_validation_data_merge_varient">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.test_collect_validation_data_merge_varient">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_collect_validation_data_merge_varient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试合并差分参数到 Varient 列&quot;&quot;&quot;</span>
+        <span class="c1"># 创建基础参数文件（包含 Varient）</span>
+        <span class="n">param_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df_music</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;音乐1&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;music1&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_music</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Music&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="n">df_varient</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;差分A&#39;</span><span class="p">,</span> <span class="s1">&#39;差分B&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;var_a&#39;</span><span class="p">,</span> <span class="s1">&#39;var_b&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df_varient</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Varient&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># 创建差分文件</span>
+        <span class="n">varient_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;varient.xlsx&quot;</span>
+        <span class="k">with</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="n">varient_file</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;openpyxl&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+                <span class="s1">&#39;ExcelParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;差分C&#39;</span><span class="p">,</span> <span class="s1">&#39;差分A&#39;</span><span class="p">],</span>  <span class="c1"># 差分A 重复</span>
+                <span class="s1">&#39;ScenarioParam&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;var_c&#39;</span><span class="p">,</span> <span class="s1">&#39;var_a&#39;</span><span class="p">]</span>
+            <span class="p">})</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;角色A&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">collect_validation_data</span><span class="p">(</span><span class="n">param_file</span><span class="p">,</span> <span class="n">varient_file</span><span class="p">)</span>
+
+        <span class="c1"># 验证 Varient 列合并且去重</span>
+        <span class="k">assert</span> <span class="s1">&#39;Varient&#39;</span> <span class="ow">in</span> <span class="n">result</span>
+        <span class="n">varient_list</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Varient&#39;</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="s1">&#39;差分A&#39;</span> <span class="ow">in</span> <span class="n">varient_list</span>
+        <span class="k">assert</span> <span class="s1">&#39;差分B&#39;</span> <span class="ow">in</span> <span class="n">varient_list</span>
+        <span class="k">assert</span> <span class="s1">&#39;差分C&#39;</span> <span class="ow">in</span> <span class="n">varient_list</span>
+        <span class="c1"># 应该去重，所以只有 3 个</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">varient_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span></div>
+
+
+<div class="viewcode-block" id="TestEdgeCases.test_generate_mappings_file_varient_variable_name">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_varient_variable_name">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_generate_mappings_file_varient_variable_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成差分映射文件时使用正确的变量名&quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;角色A&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;开心&#39;</span><span class="p">:</span> <span class="s1">&#39;happy&#39;</span><span class="p">}}</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;varient_mappings.py&quot;</span>
+
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="c1"># 读取文件内容</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">output_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="c1"># 应该使用 VARIENT_MAPPINGS 变量名</span>
+        <span class="k">assert</span> <span class="s1">&#39;VARIENT_MAPPINGS&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;PARAM_MAPPINGS&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">content</span></div>
+
+
+<div class="viewcode-block" id="TestEdgeCases.test_generate_mappings_file_param_variable_name">
+<a class="viewcode-back" href="../../tests.html#tests.test_param_updater.TestEdgeCases.test_generate_mappings_file_param_variable_name">[文档]</a>
+    <span class="k">def</span> <span class="nf">test_generate_mappings_file_param_variable_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;测试生成参数映射文件时使用正确的变量名&quot;&quot;&quot;</span>
+        <span class="n">mappings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Music&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;音乐1&#39;</span><span class="p">:</span> <span class="s1">&#39;music1&#39;</span><span class="p">}}</span>
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&quot;param_mappings.py&quot;</span>
+
+        <span class="n">updater</span><span class="o">.</span><span class="n">generate_mappings_file</span><span class="p">(</span><span class="n">mappings</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
+
+        <span class="c1"># 读取文件内容</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="n">output_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="c1"># 应该使用 PARAM_MAPPINGS 变量名</span>
+        <span class="k">assert</span> <span class="s1">&#39;PARAM_MAPPINGS&#39;</span> <span class="ow">in</span> <span class="n">content</span>
+        <span class="k">assert</span> <span class="s1">&#39;VARIENT_MAPPINGS&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">content</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; 版权所有 2025, Kirmy。</p>
+  </div>
+
+  利用 <a href="https://www.sphinx-doc.org/">Sphinx</a> 构建，使用的 
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">主题</a>
+    由 <a href="https://readthedocs.org">Read the Docs</a> 开发.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
